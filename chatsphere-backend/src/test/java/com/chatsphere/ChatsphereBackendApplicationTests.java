@@ -1,4 +1,4 @@
-package com.chatsphere.chatsphere_backend;
+package com.chatsphere;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
