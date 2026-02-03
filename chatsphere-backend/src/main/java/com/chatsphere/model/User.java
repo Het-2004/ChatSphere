@@ -1,50 +1,42 @@
 package com.chatsphere.model;
 
-import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
 
 @Document(collection = "users")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class User {
 
     @Id
     private String id;
 
-    @Indexed(unique = true)
     private String username;
-
-    /**
-     * BCrypt-hashed password
-     * NEVER store plaintext passwords
-     */
     private String passwordHash;
-
-    /**
-     * Used for Role-Based Access Control (RBAC)
-     */
     private Role role;
-
-    /**
-     * Public key for End-to-End Encryption (E2EE)
-     * Private key NEVER stored on server
-     */
-    private String publicKey;
-
-    /**
-     * Presence tracking
-     */
     private boolean online;
-
-    /**
-     * Audit field
-     */
     private Instant createdAt;
+
+    public User() {
+        this.createdAt = Instant.now();
+        this.role = Role.USER;
+    }
+
+    // getters & setters
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
+
+    public boolean isOnline() { return online; }
+    public void setOnline(boolean online) { this.online = online; }
+
+    public Instant getCreatedAt() { return createdAt; }
 }

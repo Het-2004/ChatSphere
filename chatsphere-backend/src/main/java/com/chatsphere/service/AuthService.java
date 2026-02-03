@@ -1,81 +1,46 @@
 package com.chatsphere.service;
 
-import com.chatsphere.config.JwtService;
-import com.chatsphere.dto.AuthResponse;
 import com.chatsphere.dto.LoginRequest;
 import com.chatsphere.dto.RegisterRequest;
-import com.chatsphere.dto.UserResponse;
-import com.chatsphere.model.Role;
 import com.chatsphere.model.User;
 import com.chatsphere.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import com.chatsphere.config.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-
 @Service
-@RequiredArgsConstructor
 public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    // =============== REGISTER =================
-    public UserResponse register(RegisterRequest request) {
-
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username already exists");
-        }
-
-        User user = User.builder()
-                .username(request.getUsername())
-                .passwordHash(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
-                .publicKey(request.getPublicKey())
-                .online(false)
-                .createdAt(Instant.now())
-                .build();
-
-        User savedUser = userRepository.save(user);
-
-        return UserResponse.builder()
-                .id(savedUser.getId())
-                .username(savedUser.getUsername())
-                .role(savedUser.getRole())
-                .online(savedUser.isOnline())
-                .build();
+    public AuthService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder,
+                       JwtService jwtService) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
-    // =============== LOGIN =================
-    public AuthResponse login(LoginRequest request) {
+    public void register(RegisterRequest request) {
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(user);
+    }
 
+    public String login(LoginRequest request) {
         User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() ->
-                        new RuntimeException("Invalid username or password"));
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
-        if (!passwordEncoder.matches(
-                request.getPassword(), user.getPasswordHash())) {
-            throw new RuntimeException("Invalid username or password");
+        if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
+            throw new RuntimeException("Invalid credentials");
         }
 
         user.setOnline(true);
         userRepository.save(user);
 
-        // 🔐 Generate JWT
-        String token = jwtService.generateToken(user.getUsername());
-
-        return AuthResponse.builder()
-                .token(token)
-                .user(
-                        UserResponse.builder()
-                                .id(user.getId())
-                                .username(user.getUsername())
-                                .role(user.getRole())
-                                .online(user.isOnline())
-                                .build()
-                )
-                .build();
+        return jwtService.generateToken(user.getUsername());
     }
 }
