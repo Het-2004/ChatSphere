@@ -1,0 +1,409 @@
+2026-02-03 11:21:51 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-02-03 11:21:51 [main] INFO  c.chatsphere.ChatSphereApplication - Starting ChatSphereApplication using Java 25.0.1 with PID 34688 (D:\Project\ChatSphere\chatsphere-backend\target\classes started by hetpr in D:\Project\ChatSphere\chatsphere-backend)
+2026-02-03 11:21:51 [main] INFO  c.chatsphere.ChatSphereApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-03 11:21:53 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:21:53 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-4040"]
+2026-02-03 11:21:53 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-03 11:21:53 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.15]
+2026-02-03 11:21:53 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-02-03 11:21:55 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:21:55 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-02-03 11:21:55 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:21:55 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-02-03 11:21:55 [main] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [BufferPoolPruner-1-thread-1] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:271)
+ java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1803)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1166)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:883)
+ java.base/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1016)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1076)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+ java.base/java.lang.Thread.run(Thread.java:1474)
+2026-02-03 11:21:55 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:21:55 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:21:55 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 4040 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 4040 or configure this application to listen on another port.
+
+2026-02-03 11:24:40 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-02-03 11:24:40 [main] INFO  c.chatsphere.ChatSphereApplication - Starting ChatSphereApplication using Java 25.0.1 with PID 27584 (D:\Project\ChatSphere\chatsphere-backend\target\classes started by hetpr in D:\Project\ChatSphere\chatsphere-backend)
+2026-02-03 11:24:40 [main] INFO  c.chatsphere.ChatSphereApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-03 11:24:42 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:24:42 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-4040"]
+2026-02-03 11:24:42 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-03 11:24:42 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.15]
+2026-02-03 11:24:42 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-02-03 11:24:44 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:24:44 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-02-03 11:24:44 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:24:44 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-02-03 11:24:44 [main] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [BufferPoolPruner-1-thread-1] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:271)
+ java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1803)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1166)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:883)
+ java.base/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1016)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1076)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+ java.base/java.lang.Thread.run(Thread.java:1474)
+2026-02-03 11:24:44 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:24:44 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:24:44 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 4040 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 4040 or configure this application to listen on another port.
+
+2026-02-03 11:26:53 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-02-03 11:26:53 [main] INFO  c.chatsphere.ChatSphereApplication - Starting ChatSphereApplication using Java 25.0.1 with PID 12572 (D:\Project\ChatSphere\chatsphere-backend\target\classes started by hetpr in D:\Project\ChatSphere\chatsphere-backend)
+2026-02-03 11:26:53 [main] INFO  c.chatsphere.ChatSphereApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-03 11:26:55 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-4050"]
+2026-02-03 11:26:55 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-4040"]
+2026-02-03 11:26:55 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-03 11:26:55 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.15]
+2026-02-03 11:26:55 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-02-03 11:26:57 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-4050"]
+2026-02-03 11:26:57 [main] INFO  o.a.t.u.net.NioEndpoint.certificate - Connector [https-jsse-nio-4050], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\hetpr\.keystore] using alias [chatsphere] with trust store [null]
+2026-02-03 11:26:57 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-4040"]
+2026-02-03 11:26:57 [main] INFO  c.chatsphere.ChatSphereApplication - Started ChatSphereApplication in 5.376 seconds (process running for 5.746)
+2026-02-03 11:28:25 [http-nio-4040-exec-1] INFO  o.a.coyote.http11.Http11Processor - Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+java.lang.IllegalArgumentException: Invalid character found in method name [0x160x030x010x07a0x010x000x07]0x030x030xd10xa70xd6P0xfblo0xe6(:0xeb0xa30x8c0x1bC0xbd0xf3t0x170x150xf20xfef0xd80xdf50xae0xed0xeb0xe8$@ ]. HTTP method names must be tokens
+	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:407)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:264)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-02-03 11:29:17 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-02-03 11:29:17 [main] INFO  c.chatsphere.ChatSphereApplication - Starting ChatSphereApplication using Java 25.0.1 with PID 21656 (D:\Project\ChatSphere\chatsphere-backend\target\classes started by hetpr in D:\Project\ChatSphere\chatsphere-backend)
+2026-02-03 11:29:17 [main] INFO  c.chatsphere.ChatSphereApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-03 11:29:19 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-4050"]
+2026-02-03 11:29:19 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-4040"]
+2026-02-03 11:29:19 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-03 11:29:19 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.15]
+2026-02-03 11:29:19 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-02-03 11:29:21 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-4050"]
+2026-02-03 11:29:21 [main] INFO  o.a.t.u.net.NioEndpoint.certificate - Connector [https-jsse-nio-4050], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\hetpr\.keystore] using alias [chatsphere] with trust store [null]
+2026-02-03 11:29:21 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-4040"]
+2026-02-03 11:29:21 [main] INFO  c.chatsphere.ChatSphereApplication - Started ChatSphereApplication in 5.204 seconds (process running for 5.778)
+2026-02-03 11:33:02 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-02-03 11:33:02 [main] INFO  c.chatsphere.ChatSphereApplication - Starting ChatSphereApplication using Java 25.0.1 with PID 62412 (D:\Project\ChatSphere\chatsphere-backend\target\classes started by hetpr in D:\Project\ChatSphere\chatsphere-backend)
+2026-02-03 11:33:02 [main] INFO  c.chatsphere.ChatSphereApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-03 11:33:04 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:33:04 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-4040"]
+2026-02-03 11:33:04 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-03 11:33:04 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.15]
+2026-02-03 11:33:04 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-02-03 11:33:05 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:33:05 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-02-03 11:33:05 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:33:05 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-02-03 11:33:05 [main] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [BufferPoolPruner-1-thread-1] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:271)
+ java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1803)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1166)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:883)
+ java.base/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1016)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1076)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+ java.base/java.lang.Thread.run(Thread.java:1474)
+2026-02-03 11:33:05 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:33:05 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:33:05 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 4040 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 4040 or configure this application to listen on another port.
+
+2026-02-03 11:33:33 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-02-03 11:33:33 [main] INFO  c.chatsphere.ChatSphereApplication - Starting ChatSphereApplication using Java 25.0.1 with PID 55000 (D:\Project\ChatSphere\chatsphere-backend\target\classes started by hetpr in D:\Project\ChatSphere\chatsphere-backend)
+2026-02-03 11:33:33 [main] INFO  c.chatsphere.ChatSphereApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-03 11:33:35 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-4050"]
+2026-02-03 11:33:35 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-4040"]
+2026-02-03 11:33:35 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-03 11:33:35 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.15]
+2026-02-03 11:33:35 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-02-03 11:33:37 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-4050"]
+2026-02-03 11:33:38 [main] INFO  o.a.t.u.net.NioEndpoint.certificate - Connector [https-jsse-nio-4050], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\hetpr\.keystore] using alias [chatsphere] with trust store [null]
+2026-02-03 11:33:38 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-4040"]
+2026-02-03 11:33:38 [main] INFO  c.chatsphere.ChatSphereApplication - Started ChatSphereApplication in 6.144 seconds (process running for 6.707)
+2026-02-03 11:34:53 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-02-03 11:34:54 [main] INFO  c.chatsphere.ChatSphereApplication - Starting ChatSphereApplication using Java 25.0.1 with PID 14764 (D:\Project\ChatSphere\chatsphere-backend\target\classes started by hetpr in D:\Project\ChatSphere\chatsphere-backend)
+2026-02-03 11:34:54 [main] INFO  c.chatsphere.ChatSphereApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-03 11:34:56 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:34:56 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-4040"]
+2026-02-03 11:34:56 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-03 11:34:56 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.15]
+2026-02-03 11:34:56 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-02-03 11:34:58 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:34:58 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-02-03 11:34:58 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:34:58 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-02-03 11:34:58 [main] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [BufferPoolPruner-1-thread-1] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:271)
+ java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1803)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1166)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:883)
+ java.base/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1016)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1076)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+ java.base/java.lang.Thread.run(Thread.java:1474)
+2026-02-03 11:34:58 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:34:58 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:34:58 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 4040 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 4040 or configure this application to listen on another port.
+
+2026-02-03 11:36:14 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-02-03 11:36:14 [main] INFO  c.chatsphere.ChatSphereApplication - Starting ChatSphereApplication using Java 25.0.1 with PID 47960 (D:\Project\ChatSphere\chatsphere-backend\target\classes started by hetpr in D:\Project\ChatSphere\chatsphere-backend)
+2026-02-03 11:36:14 [main] INFO  c.chatsphere.ChatSphereApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-03 11:36:16 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:36:16 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-4040"]
+2026-02-03 11:36:16 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-03 11:36:16 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.15]
+2026-02-03 11:36:17 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-02-03 11:36:18 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:36:18 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-02-03 11:36:18 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:36:18 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-02-03 11:36:18 [main] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [BufferPoolPruner-1-thread-1] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:271)
+ java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1803)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1166)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:883)
+ java.base/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1016)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1076)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+ java.base/java.lang.Thread.run(Thread.java:1474)
+2026-02-03 11:36:18 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:36:18 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["https-jsse-nio-4040"]
+2026-02-03 11:36:18 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 4040 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 4040 or configure this application to listen on another port.
+
+2026-02-03 11:47:19 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-02-03 11:47:19 [main] INFO  c.chatsphere.ChatSphereApplication - Starting ChatSphereApplication using Java 25.0.1 with PID 41524 (D:\Project\ChatSphere\chatsphere-backend\target\classes started by hetpr in D:\Project\ChatSphere\chatsphere-backend)
+2026-02-03 11:47:19 [main] INFO  c.chatsphere.ChatSphereApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-03 11:47:22 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-8080"]
+2026-02-03 11:47:22 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-02-03 11:47:22 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-03 11:47:22 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.15]
+2026-02-03 11:47:22 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-02-03 11:47:24 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-8080"]
+2026-02-03 11:47:24 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-02-03 11:47:24 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["https-jsse-nio-8080"]
+2026-02-03 11:47:24 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-02-03 11:47:24 [main] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [BufferPoolPruner-1-thread-1] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:271)
+ java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1803)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1166)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:883)
+ java.base/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1016)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1076)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+ java.base/java.lang.Thread.run(Thread.java:1474)
+2026-02-03 11:47:24 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["https-jsse-nio-8080"]
+2026-02-03 11:47:24 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["https-jsse-nio-8080"]
+2026-02-03 11:47:24 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2026-02-03 11:48:15 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-02-03 11:48:15 [main] INFO  c.chatsphere.ChatSphereApplication - Starting ChatSphereApplication using Java 25.0.1 with PID 2508 (D:\Project\ChatSphere\chatsphere-backend\target\classes started by hetpr in D:\Project\ChatSphere\chatsphere-backend)
+2026-02-03 11:48:15 [main] INFO  c.chatsphere.ChatSphereApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-03 11:48:17 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:48:17 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8090"]
+2026-02-03 11:48:17 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-03 11:48:17 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.15]
+2026-02-03 11:48:17 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-02-03 11:48:19 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:48:19 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-02-03 11:48:19 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:48:19 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-02-03 11:48:19 [main] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [BufferPoolPruner-1-thread-1] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:271)
+ java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1803)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1166)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:883)
+ java.base/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1016)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1076)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+ java.base/java.lang.Thread.run(Thread.java:1474)
+2026-02-03 11:48:19 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:48:19 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:48:19 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8090 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8090 or configure this application to listen on another port.
+
+2026-02-03 11:49:16 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-02-03 11:49:16 [main] INFO  c.chatsphere.ChatSphereApplication - Starting ChatSphereApplication using Java 25.0.1 with PID 15088 (D:\Project\ChatSphere\chatsphere-backend\target\classes started by hetpr in D:\Project\ChatSphere\chatsphere-backend)
+2026-02-03 11:49:16 [main] INFO  c.chatsphere.ChatSphereApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-03 11:49:18 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:49:18 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-03 11:49:18 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.15]
+2026-02-03 11:49:18 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-02-03 11:49:20 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:49:20 [main] INFO  o.a.t.u.net.NioEndpoint.certificate - Connector [https-jsse-nio-8090], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\hetpr\.keystore] using alias [chatsphere] with trust store [null]
+2026-02-03 11:49:20 [main] INFO  c.chatsphere.ChatSphereApplication - Started ChatSphereApplication in 5.545 seconds (process running for 6.186)
+2026-02-03 11:51:01 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-02-03 11:51:01 [main] INFO  c.chatsphere.ChatSphereApplication - Starting ChatSphereApplication using Java 25.0.1 with PID 55916 (D:\Project\ChatSphere\chatsphere-backend\target\classes started by hetpr in D:\Project\ChatSphere\chatsphere-backend)
+2026-02-03 11:51:01 [main] INFO  c.chatsphere.ChatSphereApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-03 11:51:03 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:51:03 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-03 11:51:03 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.15]
+2026-02-03 11:51:04 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-02-03 11:51:05 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:51:05 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-02-03 11:51:05 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:51:05 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-02-03 11:51:05 [main] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [BufferPoolPruner-1-thread-1] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:271)
+ java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1803)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1166)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:883)
+ java.base/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1016)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1076)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+ java.base/java.lang.Thread.run(Thread.java:1474)
+2026-02-03 11:51:05 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:51:05 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:51:05 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8090 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8090 or configure this application to listen on another port.
+
+2026-02-03 11:55:00 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-02-03 11:55:00 [main] INFO  c.chatsphere.ChatSphereApplication - Starting ChatSphereApplication using Java 25.0.1 with PID 19124 (D:\Project\ChatSphere\chatsphere-backend\target\classes started by hetpr in D:\Project\ChatSphere\chatsphere-backend)
+2026-02-03 11:55:00 [main] INFO  c.chatsphere.ChatSphereApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-03 11:55:02 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:55:02 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-03 11:55:02 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.15]
+2026-02-03 11:55:02 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-02-03 11:55:03 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:55:03 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-02-03 11:55:03 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:55:03 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-02-03 11:55:03 [main] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [BufferPoolPruner-1-thread-1] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:271)
+ java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1803)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1166)
+ java.base/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:883)
+ java.base/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1016)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1076)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+ java.base/java.lang.Thread.run(Thread.java:1474)
+2026-02-03 11:55:03 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:55:03 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["https-jsse-nio-8090"]
+2026-02-03 11:55:03 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8090 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8090 or configure this application to listen on another port.
+
+2026-02-03 11:56:00 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-02-03 11:56:00 [main] INFO  c.chatsphere.ChatSphereApplication - Starting ChatSphereApplication using Java 25.0.1 with PID 44144 (D:\Project\ChatSphere\chatsphere-backend\target\classes started by hetpr in D:\Project\ChatSphere\chatsphere-backend)
+2026-02-03 11:56:00 [main] INFO  c.chatsphere.ChatSphereApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-03 11:56:02 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-8091"]
+2026-02-03 11:56:02 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-03 11:56:02 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.15]
+2026-02-03 11:56:02 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-02-03 11:56:04 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-8091"]
+2026-02-03 11:56:04 [main] INFO  o.a.t.u.net.NioEndpoint.certificate - Connector [https-jsse-nio-8091], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\hetpr\.keystore] using alias [chatsphere] with trust store [null]
+2026-02-03 11:56:04 [main] INFO  c.chatsphere.ChatSphereApplication - Started ChatSphereApplication in 4.239 seconds (process running for 4.667)

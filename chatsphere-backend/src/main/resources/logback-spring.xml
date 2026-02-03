@@ -32,10 +32,36 @@
         </encoder>
     </appender>
 
+    <!-- JSON File Appender -->
+    <appender name="JSON_FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/chatsphere.json</file>
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${LOG_PATH}/chatsphere.%d{yyyy-MM-dd}.json.gz
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder
+                class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
+
+    <!-- Async Appender -->
+    <appender name="ASYNC_JSON_FILE"
+              class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="JSON_FILE"/>
+        <queueSize>256</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <maxFlushTime>1000</maxFlushTime>
+        <neverBlock>true</neverBlock>
+    </appender>
+
     <!-- Root Logger -->
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
+        <appender-ref ref="ASYNC_JSON_FILE"/>
     </root>
 
     <!-- Reduce noisy logs -->

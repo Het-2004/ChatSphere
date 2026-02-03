@@ -14,7 +14,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
     private final ChatSocketHandler chatSocketHandler;
     private final JwtHandshakeInterceptor jwtHandshakeInterceptor;
 
-    // ✅ Constructor Injection (REQUIRED)
     public WebSocketConfig(ChatSocketHandler chatSocketHandler,
                            JwtHandshakeInterceptor jwtHandshakeInterceptor) {
         this.chatSocketHandler = chatSocketHandler;

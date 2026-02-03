@@ -1,42 +1,74 @@
 package com.chatsphere.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
+import java.util.Collection;
+import java.util.List;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     private String id;
-
     private String username;
-    private String passwordHash;
+    private String password;
     private Role role;
     private boolean online;
     private Instant createdAt;
 
-    public User() {
-        this.createdAt = Instant.now();
-        this.role = Role.USER;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    // getters & setters
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    @Override
+    public String getPassword() {
+        return password;
+    }
 
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    @Override
+    public String getUsername() {
+        return username;
+    }
 
-    public String getPasswordHash() { return passwordHash; }
-    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+    public String getId() {
+        return id;
+    }
 
-    public Role getRole() { return role; }
-    public void setRole(Role role) { this.role = role; }
+    public Role getRole() {
+        return role;
+    }
 
-    public boolean isOnline() { return online; }
-    public void setOnline(boolean online) { this.online = online; }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-    public Instant getCreatedAt() { return createdAt; }
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

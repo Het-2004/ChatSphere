@@ -18,7 +18,7 @@ public class ChatService {
         ChatMessage message = new ChatMessage();
         message.setSender(sender);
         message.setReceiver(request.getReceiver());
-        message.setEncryptedContent(request.getEncryptedContent());
+        message.setContent(request.getContent());
         repository.save(message);
     }
 }
