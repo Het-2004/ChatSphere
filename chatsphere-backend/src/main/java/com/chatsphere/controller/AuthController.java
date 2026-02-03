@@ -18,21 +18,20 @@ public class AuthController {
 
     private final AuthService authService;
 
-    // ================= REGISTER =================
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(
             @Valid @RequestBody RegisterRequest request) {
 
-        UserResponse response = authService.register(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(authService.register(request));
     }
 
-    // ================= LOGIN =================
+    // 🔴 THIS MUST RETURN AuthResponse
     @PostMapping("/login")
-public ResponseEntity<AuthResponse> login(
-        @Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(
+            @Valid @RequestBody LoginRequest request) {
 
-    return ResponseEntity.ok(authService.login(request));
-}
-
+        return ResponseEntity.ok(authService.login(request));
+    }
 }
