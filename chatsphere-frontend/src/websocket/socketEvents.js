@@ -1,0 +1,4 @@
+export const SOCKET_EVENTS = {
+  SEND: "SEND_MESSAGE",
+  RECEIVE: "RECEIVE_MESSAGE",
+};
