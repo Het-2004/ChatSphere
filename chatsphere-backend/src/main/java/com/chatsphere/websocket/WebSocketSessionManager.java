@@ -1,13 +1,39 @@
 package com.chatsphere.websocket;
 
-import lombok.*;
-import org.springframework.stereotype.*;
+import org.springframework.stereotype.Component;
+import org.springframework.web.socket.WebSocketSession;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * ChatSphere - WebSocketSessionManager
- * Generated for high-security industry standards.
+ * Manages active WebSocket sessions
+ * userId <-> sessionId mapping
  */
-@Service
+@Component
 public class WebSocketSessionManager {
-    // TODO: Implement precise logic for WebSocketSessionManager
+
+    private final Map<String, String> sessionToUser = new ConcurrentHashMap<>();
+    private final Map<String, WebSocketSession> userToSession = new ConcurrentHashMap<>();
+
+    public void register(String userId, WebSocketSession session) {
+        sessionToUser.put(session.getId(), userId);
+        userToSession.put(userId, session);
+    }
+
+    public String removeSession(String sessionId) {
+        String userId = sessionToUser.remove(sessionId);
+        if (userId != null) {
+            userToSession.remove(userId);
+        }
+        return userId;
+    }
+
+    public String getUserId(String sessionId) {
+        return sessionToUser.get(sessionId);
+    }
+
+    public WebSocketSession getSession(String userId) {
+        return userToSession.get(userId);
+    }
 }

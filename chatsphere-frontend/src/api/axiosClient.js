@@ -2,7 +2,7 @@ import axios from "axios";
 import { getToken, clearToken } from "../utils/storage";
 
 const axiosClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:4040/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "https://localhost:4040/api",
   timeout: 15000,
   headers: {
     "Content-Type": "application/json"

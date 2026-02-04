@@ -21,8 +21,9 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 
-        registry.addHandler(chatWebSocketHandler, "/ws/chat")
+        registry.addHandler((org.springframework.web.socket.WebSocketHandler) chatWebSocketHandler, "/ws/chat")
                 .addInterceptors(authInterceptor)
-                .setAllowedOrigins("http://localhost:5173");
+                .setAllowedOrigins("http://localhost:5173")
+                .withSockJS();
     }
 }

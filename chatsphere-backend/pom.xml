@@ -11,8 +11,9 @@
 	<groupId>com.chatsphere</groupId>
 	<artifactId>chatsphere-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging> 
 	<name>chatsphere-backend</name>
-	<description>Demo project for Spring Boot</description>
+	<description>ChatSphere Backend</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -30,6 +31,25 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+		<!-- JWT -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.11.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
+        </dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
@@ -82,6 +102,11 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -98,3 +123,4 @@
 	</build>
 
 </project>
+

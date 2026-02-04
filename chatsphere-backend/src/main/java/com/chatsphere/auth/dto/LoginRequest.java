@@ -1,13 +1,8 @@
 package com.chatsphere.auth.dto;
 
-import lombok.*;
-import org.springframework.stereotype.*;
+import jakarta.validation.constraints.NotBlank;
 
-/**
- * ChatSphere - LoginRequest
- * Generated for high-security industry standards.
- */
-@Service
-public class LoginRequest {
-    // TODO: Implement precise logic for LoginRequest
-}
+public record LoginRequest(
+        @NotBlank String email,
+        @NotBlank String password
+) {}

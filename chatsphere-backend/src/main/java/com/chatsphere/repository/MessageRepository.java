@@ -1,13 +1,15 @@
 package com.chatsphere.repository;
 
-import lombok.*;
-import org.springframework.stereotype.*;
+import com.chatsphere.model.Message;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-/**
- * ChatSphere - MessageRepository
- * Generated for high-security industry standards.
- */
-@Service
-public class MessageRepository {
-    // TODO: Implement precise logic for MessageRepository
+import java.util.List;
+
+public interface MessageRepository extends MongoRepository<Message, String> {
+
+    /**
+     * Fetch encrypted messages for a chat
+     * Ordered by time (ascending)
+     */
+    List<Message> findByChatIdOrderByTimestampAsc(String chatId);
 }

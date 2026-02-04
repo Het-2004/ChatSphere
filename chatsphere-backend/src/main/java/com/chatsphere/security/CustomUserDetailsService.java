@@ -1,13 +1,33 @@
 package com.chatsphere.security;
 
-import lombok.*;
-import org.springframework.stereotype.*;
+import com.chatsphere.model.User;
+import com.chatsphere.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-/**
- * ChatSphere - CustomUserDetailsService
- * Generated for high-security industry standards.
- */
+import java.util.Collections;
+
 @Service
-public class CustomUserDetailsService {
-    // TODO: Implement precise logic for CustomUserDetailsService
+@RequiredArgsConstructor
+public class CustomUserDetailsService implements UserDetailsService {
+
+    private final UserRepository userRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String userId)
+            throws UsernameNotFoundException {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found"));
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getId(),
+                user.getPassword(),
+                Collections.emptyList()
+        );
+    }
 }

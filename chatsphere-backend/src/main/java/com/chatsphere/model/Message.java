@@ -1,13 +1,33 @@
 package com.chatsphere.model;
 
-import lombok.*;
-import org.springframework.stereotype.*;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-/**
- * ChatSphere - Message
- * Generated for high-security industry standards.
- */
-@Service
+@Data
+@Document(collection = "messages")
 public class Message {
-    // TODO: Implement precise logic for Message
+
+    @Id
+    private String id;
+
+    @Indexed
+    private String chatId;
+
+    /**
+     * Sender user ID
+     */
+    private String senderId;
+
+    /**
+     * Encrypted payload (ciphertext + iv)
+     * Backend NEVER decrypts this
+     */
+    private String encryptedPayload;
+
+    /**
+     * Message timestamp
+     */
+    private long timestamp = System.currentTimeMillis();
 }

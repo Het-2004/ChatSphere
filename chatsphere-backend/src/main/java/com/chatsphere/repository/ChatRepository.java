@@ -1,13 +1,22 @@
 package com.chatsphere.repository;
 
-import lombok.*;
-import org.springframework.stereotype.*;
+import com.chatsphere.model.Chat;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
-/**
- * ChatSphere - ChatRepository
- * Generated for high-security industry standards.
- */
-@Service
-public class ChatRepository {
-    // TODO: Implement precise logic for ChatRepository
+import java.util.List;
+import java.util.Optional;
+
+public interface ChatRepository extends MongoRepository<Chat, String> {
+
+    /**
+     * All chats where user participates
+     */
+    List<Chat> findByParticipantsContaining(String userId);
+
+    /**
+     * Find 1-to-1 chat between two users
+     */
+    @Query("{ 'participants': { $all: [?0, ?1] }, $expr: { $eq: [ { $size: '$participants' }, 2 ] } }")
+    Optional<Chat> findDirectChat(String userA, String userB);
 }

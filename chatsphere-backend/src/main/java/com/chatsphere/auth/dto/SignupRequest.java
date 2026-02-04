@@ -1,13 +1,12 @@
 package com.chatsphere.auth.dto;
 
-import lombok.*;
-import org.springframework.stereotype.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-/**
- * ChatSphere - SignupRequest
- * Generated for high-security industry standards.
- */
-@Service
-public class SignupRequest {
-    // TODO: Implement precise logic for SignupRequest
-}
+public record SignupRequest(
+        @Email String email,
+        @NotBlank
+        @Size(min = 8, message = "Password must be at least 8 characters")
+        String password
+) {}
