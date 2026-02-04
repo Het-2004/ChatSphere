@@ -239,3 +239,7 @@
     COPY . .
     RUN npm run build
     CMD ["npm", "run", "preview"]
+
+
+Backend run : .\mvnw.cmd spring-boot:run
+Frontend run : npm run dev

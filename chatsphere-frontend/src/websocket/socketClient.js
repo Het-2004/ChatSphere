@@ -7,7 +7,7 @@ import { SOCKET_EVENTS } from "./socketEvents";
 export const connectSocket = (token) => {
   const WS_URL =
     import.meta.env.VITE_WS_URL ||
-    "ws://localhost:4040/ws/chat";
+    "wss://localhost:4040/ws/chat";
 
   const socket = new WebSocket(`${WS_URL}?token=${token}`);
 
