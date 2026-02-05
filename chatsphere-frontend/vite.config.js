@@ -9,10 +9,13 @@ export default defineConfig({
       "/api": {
         target: "https://localhost:4040",
         changeOrigin: true,
+        secure: false,
       },
       "/ws": {
         target: "wss://localhost:4040",
         ws: true,
+        secure: false,
+        changeOrigin: true,
       }
     }
   }

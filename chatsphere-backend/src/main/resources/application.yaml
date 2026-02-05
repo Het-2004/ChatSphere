@@ -35,3 +35,40 @@ frontend:
 
 jwt:
   expiration-ms: 86400000 # 24 hours
+
+bucket4j:
+  enabled: true
+  filters:
+    - cache-name: "buckets"
+      filter-method: "servlet"
+      filter-type: "rate-limit"
+      url: ".*"
+      strategy: "local"
+      rate-limits:
+        - expression: "getRemoteAddr()"
+          bandwidths:
+            - capacity: 100
+              time: 1
+              unit: "minutes"
+    - cache-name: "auth-buckets"
+      filter-method: "servlet"
+      filter-type: "rate-limit"
+      url: "/api/auth/.*"
+      strategy: "local"
+      rate-limits:
+        - expression: "getRemoteAddr()"
+          bandwidths:
+            - capacity: 10
+              time: 1
+              unit: "minutes"
+    - cache-name: "chat-buckets"
+      filter-method: "servlet"
+      filter-type: "rate-limit"
+      url: "/api/messages/.*"
+      strategy: "local"
+      rate-limits:
+        - expression: "getRemoteAddr()"
+          bandwidths:
+            - capacity: 20
+              time: 1
+              unit: "minutes"
