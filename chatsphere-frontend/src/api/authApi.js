@@ -9,7 +9,7 @@ export const loginApi = async (email, password) => {
     email,
     password
   });
-  return res.data; // token
+  return res.data?.token; // token string
 };
 
 /**

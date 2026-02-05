@@ -6,7 +6,8 @@
 const TOKEN_KEY = "chatsphere_token";
 
 export const setToken = (token) => {
-  localStorage.setItem(TOKEN_KEY, token);
+  const value = token && typeof token === "object" ? token.token : token;
+  localStorage.setItem(TOKEN_KEY, value || "");
 };
 
 export const getToken = () => {

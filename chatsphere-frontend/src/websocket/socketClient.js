@@ -5,11 +5,10 @@ import { SOCKET_EVENTS } from "./socketEvents";
  * Backend MUST validate JWT during handshake
  */
 export const connectSocket = (token) => {
-  const WS_URL =
-    import.meta.env.VITE_WS_URL ||
-    "wss://localhost:4040/ws/chat";
+  const WS_URL = `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}/ws/chat`;
 
-  const socket = new WebSocket(`${WS_URL}?token=${token}`);
+  const query = new URLSearchParams({ token }).toString();
+  const socket = new WebSocket(`${WS_URL}?${query}`);
 
   socket.onopen = () => {
     console.log("[WS] Connected");
