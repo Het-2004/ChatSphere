@@ -23,6 +23,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
         registry.addHandler((org.springframework.web.socket.WebSocketHandler) chatWebSocketHandler, "/ws/chat")
                 .addInterceptors(authInterceptor)
-                .setAllowedOrigins("http://localhost:5173");
+                .setAllowedOrigins("http://localhost:5173", "http://localhost:5174");
     }
 }

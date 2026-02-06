@@ -10,12 +10,20 @@ export default defineConfig({
         target: "https://localhost:4040",
         changeOrigin: true,
         secure: false,
+<<<<<<< HEAD
+=======
+        rewrite: (path) => path
+>>>>>>> 5fe7b79 (update)
       },
       "/ws": {
-        target: "wss://localhost:4040",
+        target: "https://localhost:4040",
         ws: true,
         secure: false,
         changeOrigin: true,
+<<<<<<< HEAD
+=======
+        rewrite: (path) => path
+>>>>>>> 5fe7b79 (update)
       }
     }
   }

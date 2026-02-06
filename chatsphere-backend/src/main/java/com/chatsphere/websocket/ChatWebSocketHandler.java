@@ -98,9 +98,28 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             WebSocketSession session,
             CloseStatus status
     ) {
-        String userId = sessionManager.removeSession(session.getId());
-        if (userId != null) {
-            presenceService.markOffline(userId);
+        try {
+            String userId = sessionManager.removeSession(session.getId());
+            if (userId != null) {
+                presenceService.markOffline(userId);
+            }
+        } catch (Exception e) {
+            // Ignore errors during shutdown
+        }
+    }
+    
+    @Override
+    public void handleTransportError(
+            WebSocketSession session,
+            Throwable exception
+    ) {
+        try {
+            String userId = sessionManager.removeSession(session.getId());
+            if (userId != null) {
+                presenceService.markOffline(userId);
+            }
+        } catch (Exception e) {
+            // Ignore errors during cleanup
         }
     }
 }

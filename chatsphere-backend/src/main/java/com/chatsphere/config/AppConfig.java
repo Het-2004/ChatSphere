@@ -19,8 +19,11 @@ public class AppConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // Frontend origin (Vite)
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        // Frontend origin (Vite) - allow both common dev ports
+        config.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "http://localhost:5174"
+        ));
 
         config.setAllowedMethods(List.of(
                 "GET", "POST", "PUT", "DELETE", "OPTIONS"

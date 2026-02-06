@@ -5,21 +5,28 @@ import { SOCKET_EVENTS } from "./socketEvents";
  * Backend MUST validate JWT during handshake
  */
 export const connectSocket = (token) => {
-  const WS_URL = `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}/ws/chat`;
+  // In development, use the Vite proxy (ws://localhost:5173/ws/chat -> wss://localhost:4040/ws/chat)
+  // In production, use the same host as the web page
+  const isDev = import.meta.env.DEV;
+  const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+  
+  // Use relative path to leverage Vite proxy in development
+  const WS_URL = `${protocol}://${window.location.host}/ws/chat`;
 
   const query = new URLSearchParams({ token }).toString();
   const socket = new WebSocket(`${WS_URL}?${query}`);
 
   socket.onopen = () => {
-    console.log("[WS] Connected");
+    console.log("[WS] Connected successfully");
   };
 
   socket.onclose = (event) => {
-    console.warn("[WS] Disconnected", event.reason);
+    console.warn("[WS] Disconnected", event.code, event.reason);
   };
 
   socket.onerror = (error) => {
-    console.error("[WS] Error", error);
+    console.error("[WS] Connection error:", error);
+    console.error("[WS] URL attempted:", WS_URL);
   };
 
   return socket;

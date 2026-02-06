@@ -17,6 +17,8 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/chatsphere
+      auto-index-creation: true
+      uuid-representation: standard
 
   security:
     user:
