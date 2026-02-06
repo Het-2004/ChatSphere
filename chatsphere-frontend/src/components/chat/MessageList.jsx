@@ -15,7 +15,7 @@ export default function MessageList() {
   return (
     <div className="message-list">
       {messages.map((msg, index) => (
-        <MessageBubble key={index} message={msg} />
+        <MessageBubble key={msg.id || index} message={msg} />
       ))}
       <div ref={bottomRef} />
     </div>

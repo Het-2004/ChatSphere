@@ -37,7 +37,7 @@ axiosClient.interceptors.response.use(
       // Token expired / invalid
       if (status === 401 || status === 403) {
         clearToken();
-        // Optional: redirect handled by ProtectedRoute
+        window.location.reload();
       }
     }
 

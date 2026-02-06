@@ -1,10 +1,12 @@
 package com.chatsphere.presence;
 
+import org.springframework.stereotype.Service;
+
 import com.chatsphere.model.User;
 import com.chatsphere.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -34,6 +36,7 @@ public class PresenceService {
         try {
             userRepository.findById(userId).ifPresent(user -> {
                 user.setOnline(false);
+                user.setLastSeen(java.time.LocalDateTime.now());
                 userRepository.save(user);
             });
         } catch (Exception e) {

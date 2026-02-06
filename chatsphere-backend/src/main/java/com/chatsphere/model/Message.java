@@ -1,9 +1,10 @@
 package com.chatsphere.model;
 
-import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.Data;
 
 @Data
 @Document(collection = "messages")
@@ -29,5 +30,34 @@ public class Message {
     /**
      * Message timestamp
      */
+    /**
+     * Message timestamp
+     */
     private long timestamp = System.currentTimeMillis();
+
+    /**
+     * Message Type (TEXT, AUDIO, etc.)
+     */
+    private MessageType type = MessageType.TEXT;
+
+    /**
+     * URL for media attachments (Audio/Image)
+     * This is NOT encrypted for now (public link)
+     */
+    private String mediaUrl;
+
+    private String mimeType;
+
+    /**
+     * Map of UserId -> Emoji
+     */
+    private java.util.Map<String, String> reactions = new java.util.HashMap<>();
+
+    /**
+     * ID of the message this is replying to
+     */
+    private String replyToId;
+
+    private boolean forwarded;
+    private String originalSenderId; // For attribution if needed
 }

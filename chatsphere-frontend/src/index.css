@@ -1,68 +1,197 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Colors - Light Mode Default */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f4f4f5;
+  --bg-tertiary: #e4e4e7;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  --text-primary: #18181b;
+  --text-secondary: #71717a;
+  --text-inverted: #ffffff;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --accent-primary: #6366f1;
+  /* Indigo 500 */
+  --accent-secondary: #4f46e5;
+  /* Indigo 600 */
+
+  --border-color: #e4e4e7;
+
+  --message-own-bg: #6366f1;
+  --message-own-text: #ffffff;
+  --message-other-bg: #f4f4f5;
+  --message-other-text: #18181b;
+
+  /* Layout */
+  --header-height: 60px;
+  --sidebar-width: 320px;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+.dark {
+  /* Colors - Dark Mode */
+  --bg-primary: #18181b;
+  --bg-secondary: #27272a;
+  --bg-tertiary: #3f3f46;
+
+  --text-primary: #f4f4f5;
+  --text-secondary: #a1a1aa;
+  --text-inverted: #000000;
+
+  --accent-primary: #818cf8;
+  /* Indigo 400 */
+  --accent-secondary: #6366f1;
+  /* Indigo 500 */
+
+  --border-color: #3f3f46;
+
+  --message-own-bg: #6366f1;
+  --message-own-text: #ffffff;
+  /* Keep white for contrast even in dark mode on primary accent */
+  --message-other-bg: #27272a;
+  --message-other-text: #f4f4f5;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s, color 0.3s;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Chat Layout structure */
+#root {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+}
+
+/* Reusing previously defined classes but using variables now */
+.app-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-window {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+}
+
+.chat-header {
+  height: var(--header-height);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background-color: var(--bg-primary);
+  /* Glass effect could be added */
+}
+
+.message-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message-input-container {
+  padding: 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.message-input {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+}
+
+.message-input input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.message-bubble {
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 18px;
+  position: relative;
+}
+
+.message-bubble.own {
+  align-self: flex-end;
+  background-color: var(--message-own-bg);
+  color: var(--message-own-text);
+  border-bottom-right-radius: 4px;
+}
+
+.message-bubble.other {
+  align-self: flex-start;
+  background-color: var(--message-other-bg);
+  color: var(--message-other-text);
+  border-bottom-left-radius: 4px;
 }
 
 button {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: none;
   border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  padding: 8px 12px;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: opacity 0.2s;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+button:hover {
+  opacity: 0.8;
+}
+
+.primary-btn {
+  background-color: var(--accent-primary);
+  color: #fff;
+}
+
+/* Image/Video sizing */
+.bubble-image,
+.bubble-video {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.bubble-audio {
+  max-width: 250px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: 4px;
 }

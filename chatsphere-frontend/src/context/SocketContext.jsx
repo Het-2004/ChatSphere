@@ -1,17 +1,27 @@
 import { createContext, useEffect, useRef } from "react";
 import { connectSocket } from "../websocket/socketClient";
-import { getToken } from "../utils/storage";
+import { useAuth } from "../hooks/useAuth";
 
 export const SocketContext = createContext(null);
 
 export const SocketProvider = ({ children }) => {
   const socketRef = useRef(null);
+  const { token } = useAuth(); // Use token from AuthContext
 
   useEffect(() => {
-    const token = getToken();
     if (!token) {
-      console.warn("[SocketProvider] No token found, skipping WebSocket connection");
+      if (socketRef.current) {
+        console.log("[SocketProvider] Token removed, closing socket");
+        socketRef.current.close();
+        socketRef.current = null;
+      }
       return;
+    }
+
+    // If socket already connected with same token (unlikely with this logic, but good safety), skip
+    // Actually, we should close and reconnect if token changes.
+    if (socketRef.current) {
+      socketRef.current.close();
     }
 
     console.log("[SocketProvider] Attempting to connect WebSocket...");
@@ -29,10 +39,10 @@ export const SocketProvider = ({ children }) => {
 
     socketRef.current.onerror = (err) => {
       console.error("[SocketProvider] WebSocket error:", err);
-      console.error("[SocketProvider] Make sure the backend is running on https://localhost:4040");
+      console.error("[SocketProvider] Check if backend is running and tokens are valid.");
     };
 
-    // Cleanup on unmount
+    // Cleanup on unmount or token change
     return () => {
       if (socketRef.current) {
         console.log("[SocketProvider] Cleaning up WebSocket connection");
@@ -40,7 +50,7 @@ export const SocketProvider = ({ children }) => {
         socketRef.current = null;
       }
     };
-  }, []);
+  }, [token]);
 
   return (
     <SocketContext.Provider value={socketRef}>

@@ -1,10 +1,11 @@
 package com.chatsphere.model;
 
-import lombok.Data;
+import java.util.Set;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Set;
+import lombok.Data;
 
 @Data
 @Document(collection = "chats")
@@ -28,4 +29,9 @@ public class Chat {
      * Timestamp of last activity
      */
     private long updatedAt = System.currentTimeMillis();
+
+    private boolean isGroup;
+    private String groupName;
+    private String groupImage;
+    private Set<String> admins;
 }

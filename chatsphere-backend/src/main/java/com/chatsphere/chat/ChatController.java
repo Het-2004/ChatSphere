@@ -52,4 +52,22 @@ public class ChatController {
                 messageService.getMessages(chatId, userId)
         );
     }
+    @PostMapping("/groups")
+    public ResponseEntity<Chat> createGroup(
+            Authentication auth,
+            @RequestBody com.chatsphere.chat.dto.CreateGroupRequest request
+    ) {
+        String adminId = auth.getName();
+        return ResponseEntity.ok(chatService.createGroup(adminId, request));
+    }
+
+    @PutMapping("/chats/{chatId}/members")
+    public ResponseEntity<Chat> addMember(
+            Authentication auth,
+            @PathVariable String chatId,
+            @RequestBody java.util.Map<String, String> body // { "userId": "..." }
+    ) {
+        String adminId = auth.getName();
+        return ResponseEntity.ok(chatService.addGroupMember(adminId, chatId, body.get("userId")));
+    }
 }

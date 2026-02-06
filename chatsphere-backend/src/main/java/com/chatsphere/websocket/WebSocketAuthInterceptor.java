@@ -1,16 +1,18 @@
 package com.chatsphere.websocket;
 
-import com.chatsphere.security.JwtTokenProvider;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.net.URI;
+import java.util.Map;
+
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
-import java.net.URI;
-import java.util.Map;
+import com.chatsphere.security.JwtTokenProvider;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -26,6 +28,7 @@ public class WebSocketAuthInterceptor implements HandshakeInterceptor {
             WebSocketHandler wsHandler,
             Map<String, Object> attributes
     ) {
+        try {
         URI uri = request.getURI();
         String query = uri.getQuery();
 
@@ -40,7 +43,8 @@ public class WebSocketAuthInterceptor implements HandshakeInterceptor {
         String token = extractToken(query);
 
         if (!jwtTokenProvider.validateToken(token)) {
-            log.warn("WebSocket handshake failed: Invalid token");
+            log.error("WebSocket handshake failed: Invalid token: {}", token);
+            response.setStatusCode(org.springframework.http.HttpStatus.UNAUTHORIZED);
             return false;
         }
 
@@ -50,6 +54,10 @@ public class WebSocketAuthInterceptor implements HandshakeInterceptor {
         log.info("WebSocket handshake successful for user: {}", userId);
 
         return true;
+    } catch (Exception e) {
+        log.error("WebSocket unexpected error during handshake", e);
+        return false;
+    }
     }
     
     private String extractToken(String query) {
@@ -66,7 +74,7 @@ public class WebSocketAuthInterceptor implements HandshakeInterceptor {
             ServerHttpRequest request,
             ServerHttpResponse response,
             WebSocketHandler wsHandler,
-            Exception exception
+            @org.springframework.lang.Nullable Exception exception
     ) {
         // no-op
     }

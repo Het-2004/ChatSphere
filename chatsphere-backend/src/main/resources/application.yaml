@@ -1,11 +1,11 @@
 server:
   port: 4040
   ssl:
-    enabled: true
-    key-store: classpath:keystore.p12
-    key-store-password: changeit
-    key-store-type: PKCS12
-    key-alias: chatsphere
+    enabled: false
+    # key-store: classpath:keystore.p12
+    # key-store-password: changeit
+    # key-store-type: PKCS12
+    # key-alias: chatsphere
 
 spring:
   application:
@@ -13,6 +13,11 @@ spring:
 
   profiles:
     active: dev
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
 
   data:
     mongodb:
@@ -25,6 +30,18 @@ spring:
       name: disabled
       password: disabled
 
+  mail:
+    host: localhost
+    port: 2525
+    username: test
+    password: test
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 logging:
   level:
     root: INFO
@@ -36,6 +53,7 @@ frontend:
   url: http://localhost:5173
 
 jwt:
+  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
   expiration-ms: 86400000 # 24 hours
 
 bucket4j:

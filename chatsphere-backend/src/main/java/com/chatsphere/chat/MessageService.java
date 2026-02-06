@@ -1,11 +1,13 @@
 package com.chatsphere.chat;
 
-import com.chatsphere.model.Message;
-import com.chatsphere.repository.MessageRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.chatsphere.model.Message;
+import com.chatsphere.repository.MessageRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +30,17 @@ public class MessageService {
      * Save encrypted message (used by WebSocket)
      */
     public Message saveMessage(Message message) {
+        return messageRepository.save(message);
+    }
+
+    /**
+     * Add a reaction to a message
+     */
+    public Message addReaction(String messageId, String userId, String emoji) {
+        Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new RuntimeException("Message not found"));
+        
+        message.getReactions().put(userId, emoji);
         return messageRepository.save(message);
     }
 }

@@ -12,6 +12,21 @@ export const loginApi = async (email, password) => {
   return res.data?.token; // token string
 };
 
+export const verify2fa = async (userId, code) => {
+  const response = await axiosClient.post("/auth/verify-2fa", { userId, code });
+  return response.data;
+};
+
+export const forgotPassword = async (email) => {
+  const response = await axiosClient.post("/auth/forgot-password", { email });
+  return response.data;
+};
+
+export const resetPassword = async (token, newPassword) => {
+  const response = await axiosClient.post("/auth/reset-password", { token, newPassword });
+  return response.data;
+};
+
 /**
  * Signup user
  */

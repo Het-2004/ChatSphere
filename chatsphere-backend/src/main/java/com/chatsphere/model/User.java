@@ -1,9 +1,10 @@
 package com.chatsphere.model;
 
-import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.Data;
 
 @Data
 @Document(collection = "users")
@@ -30,4 +31,15 @@ public class User {
      * Presence info
      */
     private boolean online;
+
+    private String name;
+    private String avatarUrl;
+    private boolean twoFactorEnabled;
+    private String twoFactorCode;
+    private java.time.LocalDateTime twoFactorExpiry;
+
+    private String resetPasswordToken;
+    private java.time.LocalDateTime resetPasswordExpiry;
+    
+    private java.time.LocalDateTime lastSeen;
 }

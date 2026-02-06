@@ -5,13 +5,16 @@ import { SOCKET_EVENTS } from "./socketEvents";
  * Backend MUST validate JWT during handshake
  */
 export const connectSocket = (token) => {
-  // In development, use the Vite proxy (ws://localhost:5173/ws/chat -> wss://localhost:4040/ws/chat)
-  // In production, use the same host as the web page
+  // Connect directly to backend WebSocket endpoint
+  // Vite proxy doesn't handle WebSocket upgrades reliably
   const isDev = import.meta.env.DEV;
   const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-  
-  // Use relative path to leverage Vite proxy in development
-  const WS_URL = `${protocol}://${window.location.host}/ws/chat`;
+
+  // In development, connect directly to backend port 4040
+  // In production, use the same host as the web page
+  const WS_URL = isDev
+    ? "ws://localhost:4040/ws/chat"
+    : `${protocol}://${window.location.host}/ws/chat`;
 
   const query = new URLSearchParams({ token }).toString();
   const socket = new WebSocket(`${WS_URL}?${query}`);

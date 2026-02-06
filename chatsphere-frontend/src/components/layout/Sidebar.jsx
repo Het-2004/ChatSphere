@@ -1,9 +1,11 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useChat } from "../../hooks/useChat";
 import { getChatsApi } from "../../api/chatApi";
+import NewChatModal from "../modals/NewChatModal";
 
 export default function Sidebar() {
   const { chats, setChats, activeChatId, setActiveChatId } = useChat();
+  const [showNewChat, setShowNewChat] = useState(false);
 
   useEffect(() => {
     // Load chat list on mount
@@ -23,15 +25,17 @@ export default function Sidebar() {
     <aside className="sidebar">
       <div className="sidebar-header">
         <h2>Chats</h2>
+        <button className="new-chat-btn" onClick={() => setShowNewChat(true)} title="New Chat">
+          +
+        </button>
       </div>
 
       <div className="chat-list">
         {chats.map((chat) => (
           <div
             key={chat.id}
-            className={`chat-item ${
-              activeChatId === chat.id ? "active" : ""
-            }`}
+            className={`chat-item ${activeChatId === chat.id ? "active" : ""
+              }`}
             onClick={() => setActiveChatId(chat.id)}
           >
             <div className="chat-avatar">
@@ -47,6 +51,19 @@ export default function Sidebar() {
           </div>
         ))}
       </div>
-    </aside>
+
+
+      {
+        showNewChat && (
+          <NewChatModal
+            onClose={() => setShowNewChat(false)}
+            onChatCreated={(newChat) => {
+              setChats((prev) => [newChat, ...prev]);
+              setActiveChatId(newChat.id);
+            }}
+          />
+        )
+      }
+    </aside >
   );
 }

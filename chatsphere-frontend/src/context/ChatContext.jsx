@@ -7,6 +7,9 @@ export const ChatProvider = ({ children }) => {
   const [activeChatId, setActiveChatId] = useState(null);
   const [messagesByChat, setMessagesByChat] = useState({});
   const [typingUsers, setTypingUsers] = useState({});
+  const [replyingTo, setReplyingTo] = useState(null); // Message object being replied to
+  const [recordingUsers, setRecordingUsers] = useState({}); // { chatId: { userId: true/false } }
+  const [forwardingMessage, setForwardingMessage] = useState(null); // Message object to forward
 
   const setMessagesForChat = (chatId, messages) => {
     setMessagesByChat((prev) => ({
@@ -22,6 +25,16 @@ export const ChatProvider = ({ children }) => {
     }));
   };
 
+  const updateMessage = (chatId, messageId, updater) => {
+    setMessagesByChat((prev) => {
+      const chatMessages = prev[chatId] || [];
+      const updatedMessages = chatMessages.map((msg) =>
+        msg.id === messageId ? updater(msg) : msg
+      );
+      return { ...prev, [chatId]: updatedMessages };
+    });
+  };
+
   const value = useMemo(
     () => ({
       chats,
@@ -31,10 +44,17 @@ export const ChatProvider = ({ children }) => {
       messagesByChat,
       setMessagesForChat,
       addMessage,
+      updateMessage,
       typingUsers,
-      setTypingUsers
+      setTypingUsers,
+      replyingTo,
+      setReplyingTo,
+      recordingUsers,
+      setRecordingUsers,
+      forwardingMessage,
+      setForwardingMessage
     }),
-    [chats, activeChatId, messagesByChat, typingUsers]
+    [chats, activeChatId, messagesByChat, typingUsers, replyingTo, recordingUsers, forwardingMessage]
   );
 
   return (
