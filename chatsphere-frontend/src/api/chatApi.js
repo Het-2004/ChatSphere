@@ -24,7 +24,7 @@ export const createChatApi = async (userId) => {
 };
 
 export const createGroupApi = async (data) => {
-  const res = await axiosClient.post("/api/groups", data);
+  const res = await axiosClient.post("/groups", data);
   return res.data;
 };
 

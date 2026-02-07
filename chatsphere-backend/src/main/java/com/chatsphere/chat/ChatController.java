@@ -33,9 +33,10 @@ public class ChatController {
     @PostMapping("/chats")
     public ResponseEntity<Chat> createChat(
             Authentication auth,
-            @RequestParam String userId
+            @RequestBody java.util.Map<String, String> body
     ) {
         String me = auth.getName();
+        String userId = body.get("userId");
         return ResponseEntity.ok(chatService.createOrGetChat(me, userId));
     }
 

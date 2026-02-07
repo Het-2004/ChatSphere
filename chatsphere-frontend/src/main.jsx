@@ -3,8 +3,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 
 // 🔥 IMPORT ALL STYLES HERE
-// 🔥 IMPORT ALL STYLES HERE
 import "./index.css";
+import "./styles/features.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

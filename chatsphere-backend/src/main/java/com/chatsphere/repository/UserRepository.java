@@ -1,5 +1,6 @@
 package com.chatsphere.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -13,4 +14,9 @@ public interface UserRepository extends MongoRepository<User, String> {
     boolean existsByEmail(String email);
 
     Optional<User> findByResetPasswordToken(String token);
+
+    /**
+     * Search users by email or name
+     */
+    List<User> findByEmailContainingIgnoreCaseOrNameContainingIgnoreCase(String email, String name);
 }

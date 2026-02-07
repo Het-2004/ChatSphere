@@ -1,89 +1,545 @@
+/* ============================================
+   CHATSPHERE - PREMIUM THEME SYSTEM
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ============================================
+   BASE STYLES & RESET
+   ============================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 :root {
-  /* Colors - Light Mode Default */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f4f4f5;
-  --bg-tertiary: #e4e4e7;
-
-  --text-primary: #18181b;
-  --text-secondary: #71717a;
-  --text-inverted: #ffffff;
-
-  --accent-primary: #6366f1;
-  /* Indigo 500 */
-  --accent-secondary: #4f46e5;
-  /* Indigo 600 */
-
-  --border-color: #e4e4e7;
-
-  --message-own-bg: #6366f1;
-  --message-own-text: #ffffff;
-  --message-other-bg: #f4f4f5;
-  --message-other-text: #18181b;
-
   /* Layout */
-  --header-height: 60px;
-  --sidebar-width: 320px;
+  --header-height: 70px;
+  --sidebar-width: 340px;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.25);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Z-index */
+  --z-dropdown: 1000;
+  --z-modal: 2000;
+  --z-toast: 3000;
 }
 
-.dark {
-  /* Colors - Dark Mode */
-  --bg-primary: #18181b;
-  --bg-secondary: #27272a;
-  --bg-tertiary: #3f3f46;
+/* ============================================
+   THEME: CYBERPUNK (Default)
+   ============================================ */
 
-  --text-primary: #f4f4f5;
-  --text-secondary: #a1a1aa;
-  --text-inverted: #000000;
+.cyberpunk {
+  /* Primary Colors */
+  --color-primary: #00f3ff;
+  --color-primary-dark: #00c4d4;
+  --color-primary-light: #5ff7ff;
 
-  --accent-primary: #818cf8;
-  /* Indigo 400 */
-  --accent-secondary: #6366f1;
-  /* Indigo 500 */
+  --color-secondary: #b026ff;
+  --color-secondary-dark: #8b1fd9;
+  --color-secondary-light: #c966ff;
 
-  --border-color: #3f3f46;
+  --color-accent: #ff006e;
 
-  --message-own-bg: #6366f1;
+  /* Backgrounds */
+  --bg-primary: #0a0e27;
+  --bg-secondary: #151932;
+  --bg-tertiary: #1e2442;
+  --bg-elevated: #252b4f;
+
+  /* Glass Effect */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+  /* Text */
+  --text-primary: #ffffff;
+  --text-secondary: #a0aec0;
+  --text-tertiary: #718096;
+
+  /* Borders */
+  --border-color: rgba(255, 255, 255, 0.1);
+
+  /* Messages */
+  --message-own-bg: linear-gradient(135deg, #00f3ff 0%, #b026ff 100%);
   --message-own-text: #ffffff;
-  /* Keep white for contrast even in dark mode on primary accent */
-  --message-other-bg: #27272a;
-  --message-other-text: #f4f4f5;
+  --message-other-bg: var(--bg-tertiary);
+  --message-other-text: var(--text-primary);
+
+  /* Status Colors */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Glow Effects */
+  --glow-primary: 0 0 20px rgba(0, 243, 255, 0.5);
+  --glow-secondary: 0 0 20px rgba(176, 38, 255, 0.5);
 }
+
+/* ============================================
+   THEME: SUNSET
+   ============================================ */
+
+.sunset {
+  --color-primary: #ff6b6b;
+  --color-primary-dark: #ee5a52;
+  --color-primary-light: #ff8787;
+
+  --color-secondary: #ffd93d;
+  --color-secondary-dark: #f5c518;
+  --color-secondary-light: #ffe66d;
+
+  --color-accent: #ff006e;
+
+  --bg-primary: #2d1b69;
+  --bg-secondary: #3d2680;
+  --bg-tertiary: #4d3197;
+  --bg-elevated: #5d3cae;
+
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+  --text-primary: #ffffff;
+  --text-secondary: #e0b3ff;
+  --text-tertiary: #c084fc;
+
+  --border-color: rgba(255, 255, 255, 0.15);
+
+  --message-own-bg: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
+  --message-own-text: #ffffff;
+  --message-other-bg: var(--bg-tertiary);
+  --message-other-text: var(--text-primary);
+
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  --glow-primary: 0 0 20px rgba(255, 107, 107, 0.5);
+  --glow-secondary: 0 0 20px rgba(255, 217, 61, 0.5);
+}
+
+/* ============================================
+   THEME: OCEAN
+   ============================================ */
+
+.ocean {
+  --color-primary: #00d4ff;
+  --color-primary-dark: #00a8cc;
+  --color-primary-light: #5ce1ff;
+
+  --color-secondary: #00ffb3;
+  --color-secondary-dark: #00cc8f;
+  --color-secondary-light: #5cffd4;
+
+  --color-accent: #ff006e;
+
+  --bg-primary: #001f3f;
+  --bg-secondary: #003459;
+  --bg-tertiary: #004973;
+  --bg-elevated: #005e8d;
+
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+  --text-primary: #ffffff;
+  --text-secondary: #a0d8f1;
+  --text-tertiary: #7ec8e3;
+
+  --border-color: rgba(255, 255, 255, 0.12);
+
+  --message-own-bg: linear-gradient(135deg, #00d4ff 0%, #00ffb3 100%);
+  --message-own-text: #001f3f;
+  --message-other-bg: var(--bg-tertiary);
+  --message-other-text: var(--text-primary);
+
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  --glow-primary: 0 0 20px rgba(0, 212, 255, 0.5);
+  --glow-secondary: 0 0 20px rgba(0, 255, 179, 0.5);
+}
+
+/* ============================================
+   THEME: FOREST
+   ============================================ */
+
+.forest {
+  --color-primary: #10b981;
+  --color-primary-dark: #059669;
+  --color-primary-light: #34d399;
+
+  --color-secondary: #84cc16;
+  --color-secondary-dark: #65a30d;
+  --color-secondary-light: #a3e635;
+
+  --color-accent: #ff006e;
+
+  --bg-primary: #064e3b;
+  --bg-secondary: #065f46;
+  --bg-tertiary: #047857;
+  --bg-elevated: #059669;
+
+  --glass-bg: rgba(255, 255, 255, 0.07);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+  --text-primary: #ffffff;
+  --text-secondary: #a7f3d0;
+  --text-tertiary: #6ee7b7;
+
+  --border-color: rgba(255, 255, 255, 0.14);
+
+  --message-own-bg: linear-gradient(135deg, #10b981 0%, #84cc16 100%);
+  --message-own-text: #ffffff;
+  --message-other-bg: var(--bg-tertiary);
+  --message-other-text: var(--text-primary);
+
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  --glow-primary: 0 0 20px rgba(16, 185, 129, 0.5);
+  --glow-secondary: 0 0 20px rgba(132, 204, 22, 0.5);
+}
+
+/* ============================================
+   BODY & ROOT STYLES
+   ============================================ */
 
 body {
   margin: 0;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: var(--bg-primary);
+  background: var(--bg-primary);
   color: var(--text-primary);
-  transition: background-color 0.3s, color 0.3s;
+  transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Chat Layout structure */
 #root {
   width: 100vw;
   height: 100vh;
   display: flex;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Reusing previously defined classes but using variables now */
+/* ============================================
+   GLASSMORPHISM UTILITIES
+   ============================================ */
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-subtle {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ============================================
+   3D TRANSFORM UTILITIES
+   ============================================ */
+
+.transform-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.lift-on-hover {
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.lift-on-hover:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-lg);
+}
+
+.tilt-left {
+  transform: perspective(1000px) rotateY(-2deg);
+}
+
+.tilt-right {
+  transform: perspective(1000px) rotateY(2deg);
+}
+
+/* ============================================
+   ANIMATION KEYFRAMES
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes glow {
+
+  0%,
+  100% {
+    box-shadow: var(--glow-primary);
+  }
+
+  50% {
+    box-shadow: var(--glow-primary), var(--glow-secondary);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.animate-fade-in {
+  animation: fadeIn var(--transition-base);
+}
+
+.animate-slide-up {
+  animation: slideInUp var(--transition-base);
+}
+
+.animate-slide-left {
+  animation: slideInLeft var(--transition-base);
+}
+
+.animate-slide-right {
+  animation: slideInRight var(--transition-base);
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--transition-base);
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: var(--radius-full);
+  transition: background var(--transition-base);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-dark);
+}
+
+/* ============================================
+   SELECTION STYLING
+   ============================================ */
+
+::selection {
+  background: var(--color-primary);
+  color: var(--bg-primary);
+}
+
+::-moz-selection {
+  background: var(--color-primary);
+  color: var(--bg-primary);
+}
+
+/* ============================================
+   FOCUS STYLES
+   ============================================ */
+
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================
+   LAYOUT COMPONENTS
+   ============================================ */
+
 .app-container {
   display: flex;
   width: 100%;
   height: 100%;
+  position: relative;
 }
 
 .sidebar {
   width: var(--sidebar-width);
-  background-color: var(--bg-secondary);
+  background: var(--bg-secondary);
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 10;
 }
 
 .chat-window {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-primary);
+  background: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
 }
 
 .chat-header {
@@ -92,106 +548,243 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  background-color: var(--bg-primary);
-  /* Glass effect could be added */
+  padding: 0 var(--spacing-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 5;
 }
 
 .message-list {
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
+  padding: var(--spacing-lg);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--spacing-md);
 }
 
 .message-input-container {
-  padding: 20px;
+  padding: var(--spacing-lg);
   border-top: 1px solid var(--border-color);
-  display: flex;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* ============================================
+   BUTTON STYLES
+   ============================================ */
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all var(--transition-base);
+}
+
+.btn {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  position: relative;
+  overflow: hidden;
 }
 
-.message-input {
-  flex: 1;
-  display: flex;
-  gap: 10px;
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--bg-primary);
+  box-shadow: var(--shadow-sm);
 }
 
-.message-input input {
-  flex: 1;
-  padding: 10px;
-  border-radius: 20px;
-  border: 1px solid var(--border-color);
-  background-color: var(--bg-secondary);
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+  box-shadow: var(--shadow-md), var(--glow-primary);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: var(--color-secondary);
+  color: var(--bg-primary);
+}
+
+.btn-secondary:hover {
+  background: var(--color-secondary-dark);
+  box-shadow: var(--shadow-md), var(--glow-secondary);
+  transform: translateY(-2px);
+}
+
+.btn-glass {
+  background: var(--glass-bg);
   color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--color-primary);
+  box-shadow: var(--glow-primary);
+}
+
+/* ============================================
+   INPUT STYLES
+   ============================================ */
+
+input,
+textarea {
+  font-family: inherit;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  width: 100%;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary), 0.1), var(--glow-primary);
+  transform: scale(1.01);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* ============================================
+   CARD STYLES
+   ============================================ */
+
+.card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+}
+
+.card-glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--glass-shadow);
+}
+
+.card:hover,
+.card-glass:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ============================================
+   MESSAGE BUBBLE STYLES
+   ============================================ */
 
 .message-bubble {
   max-width: 70%;
-  padding: 10px 15px;
-  border-radius: 18px;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  word-wrap: break-word;
   position: relative;
+  transition: all var(--transition-base);
+  animation: slideInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.message-bubble.own {
-  align-self: flex-end;
-  background-color: var(--message-own-bg);
+.message-bubble:hover {
+  transform: scale(1.02);
+  box-shadow: var(--shadow-md);
+}
+
+.message-own {
+  background: var(--message-own-bg);
   color: var(--message-own-text);
-  border-bottom-right-radius: 4px;
+  align-self: flex-end;
+  border-bottom-right-radius: var(--radius-sm);
+  transform: perspective(1000px) rotateY(-1deg);
 }
 
-.message-bubble.other {
-  align-self: flex-start;
-  background-color: var(--message-other-bg);
+.message-other {
+  background: var(--message-other-bg);
   color: var(--message-other-text);
-  border-bottom-left-radius: 4px;
+  align-self: flex-start;
+  border-bottom-left-radius: var(--radius-sm);
+  transform: perspective(1000px) rotateY(1deg);
 }
 
-button {
-  background-color: var(--bg-tertiary);
-  color: var(--text-primary);
-  border: none;
-  border-radius: 8px;
-  padding: 8px 12px;
-  cursor: pointer;
-  transition: opacity 0.2s;
+/* ============================================
+   AUTH PAGE STYLES
+   ============================================ */
+
+.auth-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
 }
 
-button:hover {
-  opacity: 0.8;
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--spacing-xl);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow);
+  animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
 }
 
-.primary-btn {
-  background-color: var(--accent-primary);
-  color: #fff;
+.auth-card:hover {
+  box-shadow: var(--shadow-xl), var(--glow-primary);
 }
 
-/* Image/Video sizing */
-.bubble-image,
-.bubble-video {
-  max-width: 100%;
-  border-radius: 10px;
-  margin-bottom: 5px;
-  display: block;
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+  :root {
+    --sidebar-width: 280px;
+    --header-height: 60px;
+  }
+
+  .message-bubble {
+    max-width: 85%;
+  }
 }
 
-.bubble-audio {
-  max-width: 250px;
-}
+@media (max-width: 480px) {
+  :root {
+    --sidebar-width: 100%;
+  }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--bg-tertiary);
-  border-radius: 4px;
+  .sidebar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    z-index: 100;
+  }
 }

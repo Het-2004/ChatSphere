@@ -96,6 +96,12 @@
             <artifactId>bucket4j-spring-boot-starter</artifactId>
             <version>0.2.0</version>
         </dependency>
+
+        <!-- Gson for JSON parsing (CAPTCHA) -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

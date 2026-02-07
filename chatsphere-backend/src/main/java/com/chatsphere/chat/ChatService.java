@@ -33,6 +33,7 @@ public class ChatService {
                 .orElseGet(() -> {
                     Chat chat = new Chat();
                     chat.setParticipants(Set.of(userA, userB));
+                    chat.setName("Direct Chat");  // Display name
                     return chatRepository.save(chat);
                 });
 

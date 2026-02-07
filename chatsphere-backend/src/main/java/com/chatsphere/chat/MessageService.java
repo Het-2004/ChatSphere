@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.chatsphere.model.Message;
 import com.chatsphere.repository.MessageRepository;
+import com.chatsphere.repository.ChatRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,14 +15,21 @@ import lombok.RequiredArgsConstructor;
 public class MessageService {
 
     private final MessageRepository messageRepository;
+    private final ChatRepository chatRepository;
 
     /**
      * Get encrypted messages for a chat
-     * Backend NEVER decrypts messages
+     * Only returns messages if user is in the chat
      */
     public List<Message> getMessages(String chatId, String userId) {
+        // Verify user is a participant of this chat
+        var chat = chatRepository.findById(chatId)
+                .orElseThrow(() -> new RuntimeException("Chat not found"));
+        
+        if (!chat.getParticipants().contains(userId)) {
+            throw new RuntimeException("Access denied");
+        }
 
-        // Access control happens at repository level
         return messageRepository
                 .findByChatIdOrderByTimestampAsc(chatId);
     }

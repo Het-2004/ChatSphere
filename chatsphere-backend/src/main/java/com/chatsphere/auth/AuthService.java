@@ -10,6 +10,7 @@ import com.chatsphere.auth.dto.ForgotPasswordRequest;
 import com.chatsphere.auth.dto.ResetPasswordRequest;
 import com.chatsphere.model.User;
 import com.chatsphere.repository.UserRepository;
+import com.chatsphere.security.CaptchaService;
 import com.chatsphere.security.JwtTokenProvider;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final CaptchaService captchaService;
     private final BCryptPasswordEncoder passwordEncoder =
             new BCryptPasswordEncoder();
 
@@ -27,6 +29,8 @@ public class AuthService {
      * Signup new user
      */
     public void signup(SignupRequest request) {
+        // Verify CAPTCHA first
+        captchaService.verifyCaptcha(request.captchaToken());
 
         if (userRepository.existsByEmail(request.email())) {
             throw new RuntimeException("Email already registered");
@@ -43,6 +47,8 @@ public class AuthService {
      * Login user and issue JWT
      */
     public AuthResponse login(LoginRequest request) {
+        // Verify CAPTCHA first
+        captchaService.verifyCaptcha(request.captchaToken());
 
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() ->

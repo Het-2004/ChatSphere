@@ -2,14 +2,14 @@ import axiosClient from "./axiosClient";
 
 /**
  * Login user
- * @returns JWT token (string)
+ * @returns AuthResponse object with token, requires2fa, userId
  */
 export const loginApi = async (email, password) => {
   const res = await axiosClient.post("/auth/login", {
     email,
     password
   });
-  return res.data?.token; // token string
+  return res.data; // Return full AuthResponse object
 };
 
 export const verify2fa = async (userId, code) => {

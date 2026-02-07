@@ -1,5 +1,6 @@
 package com.chatsphere.auth;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.chatsphere.auth.dto.AuthResponse;
 import com.chatsphere.auth.dto.LoginRequest;
 import com.chatsphere.auth.dto.SignupRequest;
+import com.chatsphere.config.RateLimitService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -21,25 +24,46 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
     private final AuthService authService;
+    private final RateLimitService rateLimitService;
 
     /**
-     * Signup endpoint
+     * Signup endpoint with rate limiting
      */
     @PostMapping("/signup")
-    public ResponseEntity<Void> signup(
-            @RequestBody @Valid SignupRequest request
+    public ResponseEntity<?> signup(
+            @RequestBody @Valid SignupRequest request,
+            HttpServletRequest httpRequest
     ) {
+        // Check rate limit (3 signups per hour per IP)
+        String ipAddress = getClientIP(httpRequest);
+        if (!rateLimitService.isSignupAllowed(ipAddress)) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .body(java.util.Map.of(
+                    "error", "Too many signup attempts",
+                    "message", "Please try again later"
+                ));
+        }
+
         authService.signup(request);
         return ResponseEntity.ok().build();
     }
 
     /**
-     * Login endpoint
+     * Login endpoint with rate limiting
      */
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(
+    public ResponseEntity<?> login(
             @RequestBody @Valid LoginRequest request
     ) {
+        // Check rate limit (5 attempts per minute per email)
+        if (!rateLimitService.isLoginAllowed(request.email())) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .body(java.util.Map.of(
+                    "error", "Too many login attempts",
+                    "message", "Please try again in a few minutes"
+                ));
+        }
+
         try {
             return ResponseEntity.ok(authService.login(request));
         } catch (AuthService.TwoFactorRequiredException e) {
@@ -82,5 +106,16 @@ public class AuthController {
             @RequestAttribute("userId") String userId
     ) {
         return ResponseEntity.ok(userId);
+    }
+
+    /**
+     * Helper method to get client IP address
+     */
+    private String getClientIP(HttpServletRequest request) {
+        String xfHeader = request.getHeader("X-Forwarded-For");
+        if (xfHeader == null) {
+            return request.getRemoteAddr();
+        }
+        return xfHeader.split(",")[0];
     }
 }

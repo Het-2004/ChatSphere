@@ -20,6 +20,11 @@ public class Chat {
     private Set<String> participants;
 
     /**
+     * Display name (for groups or derived from other user for 1-to-1)
+     */
+    private String name;
+
+    /**
      * Last message preview (encrypted or metadata)
      * Used for sidebar only
      */

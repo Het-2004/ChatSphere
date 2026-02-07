@@ -25,3 +25,9 @@ frontend:
 
 jwt:
   expiration-ms: 86400000
+
+# Google reCAPTCHA v3 Configuration
+recaptcha:
+  secret-key: ${RECAPTCHA_SECRET_KEY:}
+  score-threshold: 0.5
+  enabled: true
