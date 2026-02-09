@@ -4,10 +4,11 @@ import axiosClient from "./axiosClient";
  * Login user
  * @returns AuthResponse object with token, requires2fa, userId
  */
-export const loginApi = async (email, password) => {
+export const loginApi = async (email, password, captchaToken) => {
   const res = await axiosClient.post("/auth/login", {
     email,
-    password
+    password,
+    captchaToken
   });
   return res.data; // Return full AuthResponse object
 };
@@ -30,10 +31,11 @@ export const resetPassword = async (token, newPassword) => {
 /**
  * Signup user
  */
-export const signupApi = async (email, password) => {
+export const signupApi = async (email, password, captchaToken) => {
   await axiosClient.post("/auth/signup", {
     email,
-    password
+    password,
+    captchaToken
   });
 };
 

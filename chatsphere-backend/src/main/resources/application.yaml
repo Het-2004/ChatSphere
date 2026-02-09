@@ -14,6 +14,7 @@ spring:
   profiles:
     active: dev
 
+
   servlet:
     multipart:
       max-file-size: 50MB
@@ -92,3 +93,7 @@ bucket4j:
             - capacity: 20
               time: 1
               unit: "minutes"
+
+recaptcha:
+  enabled: true
+  secret-key: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe

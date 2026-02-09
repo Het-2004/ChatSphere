@@ -35,7 +35,8 @@ axiosClient.interceptors.response.use(
       const status = error.response.status;
 
       // Token expired / invalid
-      if (status === 401 || status === 403) {
+      // Token expired / invalid / malformed
+      if (status === 401 || status === 403 || (status === 400 && error.config.url?.includes("/auth/me"))) {
         clearToken();
         window.location.reload();
       }

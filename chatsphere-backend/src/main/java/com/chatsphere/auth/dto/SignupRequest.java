@@ -21,6 +21,6 @@ public record SignupRequest(
         @ValidPassword
         String password,
         
-        @NotBlank(message = "CAPTCHA token is required")
+        // Optional in dev, required in prod via service check
         String captchaToken
 ) {}

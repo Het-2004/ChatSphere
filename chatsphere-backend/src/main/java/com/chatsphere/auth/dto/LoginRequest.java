@@ -11,6 +11,6 @@ public record LoginRequest(
         @NotBlank(message = "Password is required")
         String password,
         
-        @NotBlank(message = "CAPTCHA token is required")
+        // Optional in dev, required in prod via service check
         String captchaToken
 ) {}

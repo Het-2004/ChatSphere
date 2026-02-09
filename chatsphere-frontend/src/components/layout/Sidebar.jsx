@@ -1,314 +1,389 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useChat } from "../../hooks/useChat";
-import { getChatsApi } from "../../api/chatApi";
-import NewChatModal from "../modals/NewChatModal";
-import UserStatus from "../common/UserStatus";
-import { containerVariants, itemVariants, buttonVariants } from "../animations/variants";
-
-// Ripple effect component
-function RippleEffect({ x, y }) {
-  return (
-    <motion.span
-      initial={{ scale: 0, opacity: 1 }}
-      animate={{ scale: 2, opacity: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      style={{
-        position: "absolute",
-        left: x,
-        top: y,
-        width: "100px",
-        height: "100px",
-        borderRadius: "50%",
-        background: "var(--color-primary)",
-        transform: "translate(-50%, -50%)",
-        pointerEvents: "none",
-      }}
-    />
-  );
-}
+import { useAuth } from "../../hooks/useAuth";
+import { getChatsApi, createChatApi, searchUsersApi } from "../../api/chatApi";
+import { formatLastSeen } from "../../utils/dateUtils";
+import LoadingSpinner from "../effects/LoadingSpinner";
+import { containerVariants, itemVariants } from "../animations/variants";
 
 export default function Sidebar() {
-  const { chats, setChats, activeChatId, setActiveChatId } = useChat();
+  const {
+    chats,
+    setChats,
+    activeChatId,
+    setActiveChatId,
+    notifications,
+    onlineUsers
+  } = useChat();
+  const { user, logout } = useAuth();
+
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const [showNewChat, setShowNewChat] = useState(false);
-  const [ripples, setRipples] = useState([]);
+  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
-    // Load chat list on mount
-    const loadChats = async () => {
-      try {
-        const data = await getChatsApi();
-        setChats(data);
-      } catch (err) {
-        console.error("Failed to load chats", err);
-      }
-    };
-
     loadChats();
-  }, [setChats]);
+  }, []);
 
-  const handleChatClick = (chatId, e) => {
-    setActiveChatId(chatId);
+  const loadChats = async () => {
+    try {
+      const data = await getChatsApi();
+      setChats(data);
+    } catch (err) {
+      console.error("Failed to load chats:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    // Create ripple effect
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+  const handleSearch = async (term) => {
+    setSearchTerm(term);
+    if (term.length < 2) {
+      setSearchResults([]);
+      return;
+    }
 
-    const ripple = { id: Date.now(), x, y };
-    setRipples((prev) => [...prev, ripple]);
+    setSearching(true);
+    try {
+      // Debounce could be added here
+      const results = await searchUsersApi(term);
+      setSearchResults(results.filter(u => u.id !== user.id));
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSearching(false);
+    }
+  };
 
-    // Remove ripple after animation
-    setTimeout(() => {
-      setRipples((prev) => prev.filter((r) => r.id !== ripple.id));
-    }, 600);
+  const startChat = async (targetUserId) => {
+    try {
+      const newChat = await createChatApi(targetUserId);
+      setChats([newChat, ...chats.filter(c => c.id !== newChat.id)]);
+      setActiveChatId(newChat.id);
+      setShowNewChat(false);
+      setSearchTerm("");
+      setSearchResults([]);
+    } catch (err) {
+      console.error("Failed to start chat:", err);
+    }
+  };
+
+  const getChatName = (chat) => {
+    if (!chat.isGroup) {
+      const other = chat.participants.find(p => p.id !== user.id);
+      return other?.username || "Unknown User";
+    }
+    return chat.name;
+  };
+
+  const getChatAvatar = (chat) => {
+    if (!chat.isGroup) {
+      const other = chat.participants.find(p => p.id !== user.id);
+      return other?.avatarUrl || "https://ui-avatars.com/api/?name=" + (other?.username || "U");
+    }
+    return chat.avatarUrl || "https://ui-avatars.com/api/?name=" + chat.name;
+  };
+
+  const getOnlineStatus = (chat) => {
+    if (chat.isGroup) return null;
+    const other = chat.participants.find(p => p.id !== user.id);
+    if (!other) return null;
+    return onlineUsers.has(other.id);
   };
 
   return (
-    <motion.aside
-      className="sidebar"
+    <motion.div
+      className="sidebar glass-strong"
       initial={{ x: -300, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      style={{
-        width: "var(--sidebar-width)",
-        background: "var(--bg-secondary)",
-        borderRight: "1px solid var(--border-color)",
-        display: "flex",
-        flexDirection: "column",
-        position: "relative",
-        zIndex: 10,
-      }}
+      transition={{ type: "spring", stiffness: 100, damping: 20 }}
     >
-      {/* Header */}
-      <motion.div
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        style={{
-          padding: "var(--spacing-lg)",
-          borderBottom: "1px solid var(--border-color)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          background: "var(--glass-bg)",
-          backdropFilter: "blur(10px)",
-          WebkitBackdropFilter: "blur(10px)",
-        }}
-      >
-        <h2
-          style={{
-            margin: 0,
-            fontSize: "1.5rem",
-            fontWeight: "700",
-            background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-          }}
-        >
-          Chats
-        </h2>
+      <header className="sidebar-header">
+        <div className="user-profile">
+          <img src={user?.avatarUrl || `https://ui-avatars.com/api/?name=${user?.username}`} alt="Profile" className="avatar" />
+          <div className="user-info">
+            <h3>{user?.username}</h3>
+            <span className="status-indicator online">Online</span>
+          </div>
+          <button onClick={logout} className="btn-icon" title="Logout">
+            🚪
+          </button>
+        </div>
 
-        <motion.button
-          variants={buttonVariants}
-          whileHover="hover"
-          whileTap="tap"
-          onClick={() => setShowNewChat(true)}
-          title="New Chat"
-          style={{
-            width: "44px",
-            height: "44px",
-            borderRadius: "50%",
-            background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%)",
-            border: "none",
-            color: "#ffffff",
-            fontSize: "1.5rem",
-            fontWeight: "600",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: "var(--shadow-md)",
-          }}
-        >
-          +
-        </motion.button>
-      </motion.div>
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search chats..."
+            value={searchTerm}
+            onChange={(e) => handleSearch(e.target.value)}
+          />
+          {searchTerm && (
+            <button onClick={() => { setSearchTerm(""); setSearchResults([]); }} className="clear-search">
+              ✕
+            </button>
+          )}
+        </div>
+      </header>
 
-      {/* Chat List */}
-      <motion.div
-        variants={containerVariants}
-        initial="initial"
-        animate="animate"
-        style={{
-          flex: 1,
-          overflowY: "auto",
-          padding: "var(--spacing-sm)",
-        }}
-      >
-        <AnimatePresence>
-          {chats.map((chat, index) => (
-            <motion.div
-              key={chat.id}
-              variants={itemVariants}
-              initial="initial"
-              animate="animate"
-              exit={{ opacity: 0, x: -20 }}
-              whileHover={{ x: 4, backgroundColor: "rgba(255, 255, 255, 0.05)" }}
-              onClick={(e) => handleChatClick(chat.id, e)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "var(--spacing-md)",
-                padding: "var(--spacing-md)",
-                borderRadius: "var(--radius-md)",
-                cursor: "pointer",
-                marginBottom: "var(--spacing-xs)",
-                background: activeChatId === chat.id ? "var(--glass-bg)" : "transparent",
-                border: activeChatId === chat.id ? "1px solid var(--color-primary)" : "1px solid transparent",
-                position: "relative",
-                overflow: "hidden",
-                transition: "all var(--transition-base)",
-                boxShadow: activeChatId === chat.id ? "var(--shadow-md)" : "none",
-              }}
-            >
-              {/* Ripple effects */}
-              <AnimatePresence>
-                {ripples.map((ripple) => (
-                  <RippleEffect key={ripple.id} x={ripple.x} y={ripple.y} />
-                ))}
-              </AnimatePresence>
-
-              {/* Avatar */}
-              <motion.div
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                style={{
-                  position: "relative",
-                  flexShrink: 0,
-                }}
-              >
-                <div
-                  style={{
-                    width: "48px",
-                    height: "48px",
-                    borderRadius: "50%",
-                    background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "1.25rem",
-                    fontWeight: "600",
-                    color: "#ffffff",
-                    boxShadow: "var(--shadow-sm)",
-                  }}
-                >
-                  {chat.name?.charAt(0).toUpperCase()}
-                </div>
-                <UserStatus userId={chat.id} />
-              </motion.div>
-
-              {/* Chat Info */}
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div
-                  style={{
-                    fontSize: "1rem",
-                    fontWeight: activeChatId === chat.id ? "600" : "500",
-                    color: "var(--text-primary)",
-                    marginBottom: "var(--spacing-xs)",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {chat.name}
-                </div>
-
-                {chat.lastMessage && (
-                  <div
-                    style={{
-                      fontSize: "0.875rem",
-                      color: "var(--text-secondary)",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {chat.lastMessage}
-                  </div>
-                )}
-              </div>
-
-              {/* Unread badge */}
-              {chat.unreadCount > 0 && (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  style={{
-                    minWidth: "24px",
-                    height: "24px",
-                    borderRadius: "var(--radius-full)",
-                    background: "var(--color-primary)",
-                    color: "#ffffff",
-                    fontSize: "0.75rem",
-                    fontWeight: "600",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "0 var(--spacing-xs)",
-                    boxShadow: "var(--glow-primary)",
-                  }}
-                >
-                  {chat.unreadCount}
-                </motion.div>
-              )}
-
-              {/* Active indicator */}
-              {activeChatId === chat.id && (
-                <motion.div
-                  layoutId="activeChat"
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    width: "4px",
-                    height: "60%",
-                    background: "linear-gradient(180deg, var(--color-primary) 0%, var(--color-secondary) 100%)",
-                    borderRadius: "0 var(--radius-sm) var(--radius-sm) 0",
-                    boxShadow: "var(--glow-primary)",
-                  }}
-                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                />
-              )}
-            </motion.div>
-          ))}
-        </AnimatePresence>
-
-        {/* Empty state */}
-        {chats.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            style={{
-              textAlign: "center",
-              padding: "var(--spacing-xl)",
-              color: "var(--text-secondary)",
-            }}
+      <div className="chat-list-container">
+        {loading ? (
+          <div className="loading-state">
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <motion.ul
+            className="chat-list"
+            variants={containerVariants}
+            initial="initial"
+            animate="animate"
           >
-            <div style={{ fontSize: "3rem", marginBottom: "var(--spacing-md)" }}>💬</div>
-            <p style={{ margin: 0, fontSize: "0.875rem" }}>No chats yet</p>
-            <p style={{ margin: "var(--spacing-xs) 0 0", fontSize: "0.75rem" }}>
-              Click + to start a new chat
-            </p>
-          </motion.div>
-        )}
-      </motion.div>
+            {/* Search Results */}
+            {searchResults.length > 0 && (
+              <div className="search-results">
+                <h4>Found Users</h4>
+                {searchResults.map(u => (
+                  <motion.li
+                    key={u.id}
+                    variants={itemVariants}
+                    onClick={() => startChat(u.id)}
+                    className="chat-item search-result"
+                  >
+                    <img src={u.avatarUrl || `https://ui-avatars.com/api/?name=${u.username}`} alt={u.username} className="avatar" />
+                    <div className="chat-info">
+                      <span className="chat-name">{u.username}</span>
+                      <span className="chat-preview">Click to start chatting</span>
+                    </div>
+                  </motion.li>
+                ))}
+              </div>
+            )}
 
-      {/* New Chat Modal */}
-      <AnimatePresence>
-        {showNewChat && <NewChatModal onClose={() => setShowNewChat(false)} />}
-      </AnimatePresence>
-    </motion.aside>
+            {/* Existing Chats */}
+            {chats.length === 0 && searchResults.length === 0 ? (
+              <div className="empty-state">
+                <p>No chats yet. Start a conversation!</p>
+                <button onClick={() => setShowNewChat(true)} className="btn-primary">
+                  Start New Chat
+                </button>
+              </div>
+            ) : (
+              chats.map(chat => {
+                const isActive = activeChatId === chat.id;
+                const isOnline = getOnlineStatus(chat);
+                const unread = notifications[chat.id] || 0;
+
+                return (
+                  <motion.li
+                    key={chat.id}
+                    variants={itemVariants}
+                    onClick={() => setActiveChatId(chat.id)}
+                    className={`chat-item ${isActive ? 'active' : ''}`}
+                    whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.05)" }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <div className="avatar-wrapper">
+                      <img src={getChatAvatar(chat)} alt="Avatar" className="avatar" />
+                      {isOnline && <span className="online-badge" />}
+                    </div>
+
+                    <div className="chat-info">
+                      <div className="chat-header">
+                        <span className="chat-name">{getChatName(chat)}</span>
+                        {chat.lastMessageAt && (
+                          <span className="chat-time">{formatLastSeen(chat.lastMessageAt)}</span>
+                        )}
+                      </div>
+                      <div className="chat-footer">
+                        <span className="chat-preview text-truncate">
+                          {chat.lastMessage?.text || "No messages yet"}
+                        </span>
+                        {unread > 0 && <span className="unread-badge">{unread}</span>}
+                      </div>
+                    </div>
+                  </motion.li>
+                );
+              })
+            )}
+          </motion.ul>
+        )}
+      </div>
+
+      <style>{`
+        .sidebar {
+          width: 350px;
+          height: 100%;
+          border-right: 1px solid var(--glass-border);
+          display: flex;
+          flex-direction: column;
+          background: rgba(10, 10, 15, 0.6); 
+          /* fallback if glass-strong doesn't apply well */
+        }
+
+        .sidebar-header {
+          padding: 1.5rem;
+          border-bottom: 1px solid var(--glass-border);
+          background: rgba(0,0,0,0.2);
+        }
+
+        .user-profile {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .user-info h3 {
+          margin: 0;
+          font-size: 1.1rem;
+          color: var(--text-primary);
+        }
+
+        .status-indicator {
+          font-size: 0.8rem;
+          color: var(--color-success);
+        }
+
+        .search-bar {
+          position: relative;
+        }
+
+        .search-bar input {
+          width: 100%;
+          padding: 0.8rem 1rem;
+          border-radius: 12px;
+          border: 1px solid var(--glass-border);
+          background: rgba(255,255,255,0.05);
+          color: white;
+          transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+          background: rgba(255,255,255,0.1);
+          border-color: var(--color-primary);
+          box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
+        }
+
+        .clear-search {
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: var(--text-tertiary);
+          cursor: pointer;
+        }
+
+        .chat-list-container {
+          flex: 1;
+          overflow-y: auto;
+          padding: 1rem;
+        }
+        
+        .chat-list-container::-webkit-scrollbar {
+          width: 6px;
+        }
+        
+        .chat-list-container::-webkit-scrollbar-thumb {
+          background: rgba(255,255,255,0.1);
+          border-radius: 3px;
+        }
+
+        .chat-item {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 1rem;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: background 0.2s;
+          margin-bottom: 0.5rem;
+        }
+
+        .chat-item.active {
+          background: rgba(0, 243, 255, 0.1);
+          border: 1px solid rgba(0, 243, 255, 0.2);
+        }
+
+        .avatar-wrapper {
+          position: relative;
+        }
+
+        .avatar {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .online-badge {
+          position: absolute;
+          bottom: 2px;
+          right: 2px;
+          width: 12px;
+          height: 12px;
+          background: var(--color-success);
+          border-radius: 50%;
+          border: 2px solid var(--bg-primary);
+          box-shadow: 0 0 5px var(--color-success);
+        }
+
+        .chat-info {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .chat-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.25rem;
+        }
+
+        .chat-name {
+          font-weight: 600;
+          color: var(--text-primary);
+        }
+
+        .chat-time {
+          font-size: 0.75rem;
+          color: var(--text-tertiary);
+        }
+
+        .chat-footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .chat-preview {
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .unread-badge {
+          background: var(--color-primary);
+          color: black;
+          font-size: 0.75rem;
+          font-weight: bold;
+          padding: 0.1rem 0.4rem;
+          border-radius: 10px;
+          box-shadow: 0 0 10px var(--color-primary);
+        }
+        
+        .empty-state {
+          text-align: center;
+          padding: 2rem;
+          color: var(--text-secondary);
+        }
+      `}</style>
+    </motion.div>
   );
 }

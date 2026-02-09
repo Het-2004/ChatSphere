@@ -96,12 +96,7 @@ public class CaptchaService {
                 throw new CaptchaValidationException(errorMessage);
             }
 
-            // Check score (reCAPTCHA v3 specific)
-            if (captchaResponse.getScore() < scoreThreshold) {
-                throw new CaptchaValidationException(
-                    "CAPTCHA score too low: " + captchaResponse.getScore() + " (threshold: " + scoreThreshold + ")"
-                );
-            }
+            // Score check removed for reCAPTCHA v2 support
 
         } catch (CaptchaValidationException e) {
             throw e;

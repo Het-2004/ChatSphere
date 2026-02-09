@@ -1,9 +1,9 @@
-import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useRef, useEffect } from "react";
 
 /**
- * Animated particles background
- * Creates floating particles with theme-aware colors
+ * Cyberfield Background
+ * A retro-futuristic moving grid with a starfield.
+ * "Cyberpunk" aesthetic: Dark purple/blue grid with neon pink/cyan horizons.
  */
 export default function ParticlesBackground() {
     const canvasRef = useRef(null);
@@ -13,99 +13,144 @@ export default function ParticlesBackground() {
         if (!canvas) return;
 
         const ctx = canvas.getContext("2d");
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        let animationFrameId;
 
-        // Get theme color from CSS variable
-        const getThemeColor = () => {
-            const primary = getComputedStyle(document.documentElement)
-                .getPropertyValue("--color-primary")
-                .trim();
-            return primary || "#00f3ff";
+        const resizeCanvas = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
+
+        // --- Configuration ---
+        const STAR_COUNT = 200;
+        const GRID_SIZE = 40;
+        const SPEED = 2; // Movement speed
+
+        // Colors
+        const BG_COLOR = "#050510"; // Deep space
+        const GRID_COLOR = "#00f3ff"; // Cyan neon
+        const HORIZON_COLOR = "#bc13fe"; // Magenta neon
+
+        // --- State ---
+        let offset = 0;
+
+        // --- Stars ---
+        const stars = [];
+        for (let i = 0; i < STAR_COUNT; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height * 0.6, // Top 60% only
+                size: Math.random() * 2,
+                opacity: Math.random(),
+                speed: Math.random() * 0.5
+            });
+        }
+
+        const drawStars = () => {
+            ctx.fillStyle = "white";
+            stars.forEach(star => {
+                ctx.globalAlpha = star.opacity;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.globalAlpha = 1.0;
         };
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 3 + 1;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
-                this.opacity = Math.random() * 0.5 + 0.2;
+        const drawGrid = () => {
+            // Horizon line (approx 60% down)
+            const horizonY = canvas.height * 0.6;
+            const w = canvas.width;
+            const h = canvas.height;
+            const centerX = w / 2;
+
+            // Gradient for grid fade
+            const gradient = ctx.createLinearGradient(0, horizonY, 0, h);
+            gradient.addColorStop(0, HORIZON_COLOR); // Pink at horizon
+            gradient.addColorStop(0.5, GRID_COLOR);  // Cyan in middle
+            gradient.addColorStop(1, "transparent"); // Fade out near bottom
+
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = 1;
+
+            // 1. Vertical Lines (Fan out from vanishing point)
+            ctx.beginPath();
+            // We draw lines from vanishing point (center, horizon) to points along the bottom edge
+            // Spacing at bottom determines density
+            const bottomSpacing = GRID_SIZE * 4;
+            // Extend explicitly beyond width to ensure coverage when fanning
+            const numLines = Math.ceil(w / bottomSpacing) * 2;
+
+            for (let i = -numLines; i <= numLines; i++) {
+                // Calculate x at bottom of screen
+                const bottomX = centerX + (i * bottomSpacing);
+
+                ctx.moveTo(centerX, horizonY);
+                ctx.lineTo(bottomX, h);
             }
+            ctx.stroke();
 
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
+            // 2. Horizontal Lines (Moving towards viewer)
+            // Z represents depth. We move the "grid" by adjusting the starting Z offset.
+            offset = (offset + SPEED) % GRID_SIZE;
 
-                // Wrap around edges
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
+            ctx.beginPath();
+            // We iterate from "near" (bottom) to "far" (horizon)
+            // Perspective projection: y = horizonY + (scale / z)
+            // We increment z linearly in 3D space
+
+            const perspectiveScale = 300; // Controls how "deep" the grid looks
+
+            // Draw lines from z=10 (near) to z=400 (far)
+            for (let z = 10; z < 400; z += GRID_SIZE) {
+                const currentZ = z - offset;
+                if (currentZ <= 0) continue;
+
+                // Project 3D Z to 2D Y
+                // The larger the Z, the closer to 0 (horizon)
+                const yOffset = perspectiveScale * (10 / currentZ); // Simple inverse projection
+                const screenY = h - yOffset * 5; // Scale up to fill screen
+
+                if (screenY < horizonY) continue;
+                if (screenY > h) continue;
+
+                ctx.moveTo(0, screenY);
+                ctx.lineTo(w, screenY);
             }
+            ctx.stroke();
 
-            draw() {
-                ctx.fillStyle = getThemeColor();
-                ctx.globalAlpha = this.opacity;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.globalAlpha = 1;
-            }
-        }
+            // Horizon Glow
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = HORIZON_COLOR;
+            ctx.fillStyle = HORIZON_COLOR;
+            ctx.fillRect(0, horizonY - 2, w, 4);
 
-        // Create particles
-        const particleCount = 100;
-        const particles = [];
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
+            // Fill bottom with semi-transparent black to fade grid slightly
+            const fadeGradient = ctx.createLinearGradient(0, horizonY, 0, h);
+            fadeGradient.addColorStop(0, "rgba(5,5,16, 0.2)");
+            fadeGradient.addColorStop(0.8, "rgba(5,5,16, 0.8)"); // Darker near bottom
+            ctx.fillStyle = fadeGradient;
+            ctx.fillRect(0, horizonY, w, h - horizonY);
+        };
 
-        // Animation loop
         const animate = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Clear
+            ctx.fillStyle = BG_COLOR;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.shadowBlur = 0;
 
-            particles.forEach((particle) => {
-                particle.update();
-                particle.draw();
-            });
+            drawStars();
+            drawGrid();
 
-            // Draw connections
-            particles.forEach((a, i) => {
-                particles.slice(i + 1).forEach((b) => {
-                    const dx = a.x - b.x;
-                    const dy = a.y - b.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < 150) {
-                        ctx.strokeStyle = getThemeColor();
-                        ctx.globalAlpha = (1 - distance / 150) * 0.2;
-                        ctx.lineWidth = 1;
-                        ctx.beginPath();
-                        ctx.moveTo(a.x, a.y);
-                        ctx.lineTo(b.x, b.y);
-                        ctx.stroke();
-                        ctx.globalAlpha = 1;
-                    }
-                });
-            });
-
-            requestAnimationFrame(animate);
+            animationFrameId = requestAnimationFrame(animate);
         };
 
         animate();
 
-        // Handle resize
-        const handleResize = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        };
-
-        window.addEventListener("resize", handleResize);
-
         return () => {
-            window.removeEventListener("resize", handleResize);
+            window.removeEventListener("resize", resizeCanvas);
+            cancelAnimationFrame(animationFrameId);
         };
     }, []);
 
@@ -119,8 +164,8 @@ export default function ParticlesBackground() {
                 width: "100%",
                 height: "100%",
                 pointerEvents: "none",
-                zIndex: 0,
-                opacity: 0.4,
+                zIndex: -1, // Ensure it's behind everything
+                background: "#050510",
             }}
         />
     );
