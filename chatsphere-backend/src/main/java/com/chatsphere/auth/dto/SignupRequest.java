@@ -20,6 +20,10 @@ public record SignupRequest(
         @NotBlank(message = "Password is required")
         @ValidPassword
         String password,
+
+        @NotBlank(message = "Name is required")
+        @Size(max = 50, message = "Name must not exceed 50 characters")
+        String name,
         
         // Optional in dev, required in prod via service check
         String captchaToken

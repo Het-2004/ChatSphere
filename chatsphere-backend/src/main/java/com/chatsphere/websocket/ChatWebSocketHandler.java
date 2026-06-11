@@ -25,6 +25,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     private final MessageService messageService;
     private final PresenceService presenceService;
     private final com.chatsphere.chat.ChatService chatService;
+    private final com.chatsphere.repository.ChatRepository chatRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -38,30 +39,51 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             sessionManager.register(userId, session);
             presenceService.markOnline(userId);
             
-            // Broadcast presence to all user's chats
             try {
                 broadcastPresence(userId, true, null);
             } catch (Exception e) {
-                // log error
+                e.printStackTrace();
             }
         }
     }
     
     private void broadcastPresence(String userId, boolean online, java.time.LocalDateTime lastSeen) {
          try {
-             java.util.List<com.chatsphere.model.Chat> userChats = chatService.getUserChats(userId);
+             java.util.List<com.chatsphere.model.Chat> userChats = chatRepository.findByParticipantsContaining(userId);
              
              Map<String, Object> payload = new HashMap<>();
              payload.put("userId", userId);
              payload.put("online", online);
              if (lastSeen != null) payload.put("lastSeen", lastSeen.toString());
              
-             Map<String, Object> message = new HashMap<>();
-             message.put("type", "PRESENCE_UPDATE");
-             message.put("payload", payload);
-             
+             // Broadcast to web (PRESENCE_UPDATE)
+             Map<String, Object> webMessage = new HashMap<>();
+             webMessage.put("type", "PRESENCE_UPDATE");
+             webMessage.put("payload", payload);
+
+             // Broadcast to mobile (USER_ONLINE / USER_OFFLINE)
+             Map<String, Object> mobileMessage = new HashMap<>();
+             mobileMessage.put("type", online ? "USER_ONLINE" : "USER_OFFLINE");
+             mobileMessage.put("payload", Map.of("userId", userId));
+
+             java.util.Set<String> recipientIds = new java.util.HashSet<>();
              for (com.chatsphere.model.Chat chat : userChats) {
-                 broadcastToChat(chat.getId(), message, userId);
+                 recipientIds.addAll(chat.getParticipants());
+             }
+             recipientIds.remove(userId); // Exclude self
+
+             String jsonWebPayload = objectMapper.writeValueAsString(webMessage);
+             TextMessage webMsg = new TextMessage(jsonWebPayload);
+
+             String jsonMobilePayload = objectMapper.writeValueAsString(mobileMessage);
+             TextMessage mobileMsg = new TextMessage(jsonMobilePayload);
+
+             for (String recipientId : recipientIds) {
+                 WebSocketSession userSession = sessionManager.getSession(recipientId);
+                 if (userSession != null && userSession.isOpen()) {
+                     userSession.sendMessage(webMsg);
+                     userSession.sendMessage(mobileMsg);
+                 }
              }
          } catch (Exception e) {
              e.printStackTrace();
@@ -90,6 +112,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             handleReaction(session, root.get("payload"));
         } else if ("RECORDING_START".equals(type) || "RECORDING_STOP".equals(type)) {
             handleRecordingEvent(session, type, root.get("payload"));
+        } else if ("TYPING_START".equals(type) || "TYPING_STOP".equals(type)) {
+            handleTypingEvent(session, type, root.get("payload"));
         }
     }
 
@@ -174,6 +198,19 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         broadcastToChat(chatId, response, userId); // Exclude sender
     }
 
+    private void handleTypingEvent(WebSocketSession session, String type, JsonNode payload) throws Exception {
+        String userId = (String) session.getAttributes().get("userId");
+        if (userId == null) return;
+
+        String chatId = payload.get("chatId").asText();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("type", type);
+        response.put("payload", Map.of("chatId", chatId, "userId", userId));
+
+        broadcastToChat(chatId, response, userId); // Exclude sender
+    }
+
     private void broadcastToChat(String chatId, Object payload, String excludeUserId) throws Exception {
         java.util.Set<String> participants = chatService.getChatParticipants(chatId);
         String jsonPayload = objectMapper.writeValueAsString(payload);
@@ -200,6 +237,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             String userId = sessionManager.removeSession(session.getId());
             if (userId != null) {
                 presenceService.markOffline(userId);
+                broadcastPresence(userId, false, java.time.LocalDateTime.now());
             }
         } catch (Exception e) {
             // Ignore errors during shutdown
@@ -215,6 +253,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             String userId = sessionManager.removeSession(session.getId());
             if (userId != null) {
                 presenceService.markOffline(userId);
+                broadcastPresence(userId, false, java.time.LocalDateTime.now());
             }
         } catch (Exception e) {
             // Ignore errors during cleanup

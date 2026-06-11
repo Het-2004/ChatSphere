@@ -31,10 +31,41 @@ public class UserController {
             Authentication auth
     ) {
         String currentUserId = auth.getName();
-        List<User> users = userRepository.findByEmailContainingIgnoreCaseOrNameContainingIgnoreCase(query, query)
-                .stream()
+        System.out.println("Search query: " + query);
+        System.out.println("Current User ID from Auth: " + currentUserId);
+        
+        List<User> users = userRepository.findByEmailContainingIgnoreCaseOrNameContainingIgnoreCase(query, query);
+        System.out.println("Users found (before filter): " + users.size());
+        users.forEach(u -> System.out.println("Found user: " + u.getEmail() + ", ID: " + u.getId()));
+
+        List<User> filteredUsers = users.stream()
                 .filter(user -> !user.getId().equals(currentUserId))
                 .toList();
-        return ResponseEntity.ok(users);
+        
+        System.out.println("Users after filter: " + filteredUsers.size());
+        return ResponseEntity.ok(filteredUsers);
+    }
+
+    @org.springframework.web.bind.annotation.PutMapping("/me")
+    public ResponseEntity<User> updateProfile(
+            @jakarta.validation.Valid @org.springframework.web.bind.annotation.RequestBody com.chatsphere.user.dto.UpdateProfileRequest request,
+            Authentication auth
+    ) {
+        String currentUserId = auth.getName();
+        User user = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (request.name() != null) {
+            // Check if name is changing and if it's unique
+            if (!request.name().equals(user.getName()) && userRepository.existsByName(request.name())) {
+                 throw new RuntimeException("Username already taken");
+            }
+            user.setName(request.name());
+        }
+        if (request.bio() != null) user.setBio(request.bio());
+        if (request.status() != null) user.setStatus(request.status());
+
+        User updatedUser = userRepository.save(user);
+        return ResponseEntity.ok(updatedUser);
     }
 }

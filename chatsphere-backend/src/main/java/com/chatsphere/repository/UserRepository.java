@@ -19,4 +19,9 @@ public interface UserRepository extends MongoRepository<User, String> {
      * Search users by email or name
      */
     List<User> findByEmailContainingIgnoreCaseOrNameContainingIgnoreCase(String email, String name);
+
+    /**
+     * Check if a user with the given name exists
+     */
+    boolean existsByName(String name);
 }

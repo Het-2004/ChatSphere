@@ -13,6 +13,7 @@ export default function Signup() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -54,13 +55,13 @@ export default function Signup() {
 
     try {
       setSubmitting(true);
-      await signupApi(email, password, captchaToken);
+      await signupApi(email, password, name, captchaToken);
       setSuccess(true);
       // Wait for success animation
       setTimeout(() => navigate("/login", { replace: true }), 2000);
     } catch (err) {
       // Clean error presentation
-      const msg = err.response?.data?.message || err.message || "Signup failed. Please try again.";
+      const msg = err.message || err.response?.data?.message || "Signup failed. Please try again.";
       setError(msg.replace("CAPTCHA", "Security check"));
     } finally {
       setSubmitting(false);
@@ -145,6 +146,19 @@ export default function Signup() {
                       className="floating-input"
                     />
                     <label className="floating-label">Email Address</label>
+                    <div className="input-highlight" />
+                  </div>
+
+                  <div className="input-group">
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      placeholder=" "
+                      className="floating-input"
+                    />
+                    <label className="floating-label">Full Name</label>
                     <div className="input-highlight" />
                   </div>
 

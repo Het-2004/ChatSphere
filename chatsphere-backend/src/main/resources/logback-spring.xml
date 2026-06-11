@@ -11,12 +11,17 @@
         </encoder>
     </appender>
 
-    <!-- File logging -->
+    <!-- File logging with size limits -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/chatsphere.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/chatsphere-%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>30</maxHistory>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/chatsphere-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- Keep only 3 days of logs -->
+            <maxHistory>3</maxHistory>
+            <!-- Max 10MB per file -->
+            <maxFileSize>10MB</maxFileSize>
+            <!-- Total size cap: 50MB -->
+            <totalSizeCap>50MB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
@@ -24,13 +29,13 @@
     </appender>
 
     <!-- Root logger -->
-    <root level="INFO">
+    <root level="WARN">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </root>
 
     <!-- App-specific logging -->
-    <logger name="com.chatsphere" level="DEBUG"/>
-    <logger name="org.springframework.security" level="INFO"/>
+    <logger name="com.chatsphere" level="WARN"/>
+    <logger name="org.springframework.security" level="WARN"/>
 
 </configuration>

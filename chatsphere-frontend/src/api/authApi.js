@@ -31,10 +31,11 @@ export const resetPassword = async (token, newPassword) => {
 /**
  * Signup user
  */
-export const signupApi = async (email, password, captchaToken) => {
+export const signupApi = async (email, password, name, captchaToken) => {
   await axiosClient.post("/auth/signup", {
     email,
     password,
+    name,
     captchaToken
   });
 };
@@ -45,5 +46,10 @@ export const signupApi = async (email, password, captchaToken) => {
  */
 export const getMeApi = async () => {
   const res = await axiosClient.get("/auth/me");
+  return res.data;
+};
+
+export const updateProfileApi = async (data) => {
+  const res = await axiosClient.put("/users/me", data);
   return res.data;
 };

@@ -18,6 +18,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import com.chatsphere.repository.UserRepository;
+import com.chatsphere.model.User;
+
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -25,6 +28,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final RateLimitService rateLimitService;
+    private final UserRepository userRepository;
 
     /**
      * Signup endpoint with rate limiting
@@ -83,29 +87,45 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<Void> forgotPassword(
+    public ResponseEntity<?> forgotPassword(
             @RequestBody @Valid com.chatsphere.auth.dto.ForgotPasswordRequest request
     ) {
-        authService.forgotPassword(request);
-        return ResponseEntity.ok().build();
+        try {
+            authService.forgotPassword(request);
+            return ResponseEntity.ok(java.util.Map.of(
+                "message", "Password reset email sent. Please check your inbox."
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(java.util.Map.of("message", e.getMessage()));
+        }
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<Void> resetPassword(
+    public ResponseEntity<?> resetPassword(
             @RequestBody @Valid com.chatsphere.auth.dto.ResetPasswordRequest request
     ) {
-        authService.resetPassword(request);
-        return ResponseEntity.ok().build();
+        try {
+            authService.resetPassword(request);
+            return ResponseEntity.ok(java.util.Map.of(
+                "message", "Password has been reset successfully."
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(java.util.Map.of("message", e.getMessage()));
+        }
     }
 
     /**
      * Get current user (used by frontend on reload)
      */
     @GetMapping("/me")
-    public ResponseEntity<String> me(
+    public ResponseEntity<User> me(
             @RequestAttribute("userId") String userId
     ) {
-        return ResponseEntity.ok(userId);
+        return userRepository.findById(userId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     /**

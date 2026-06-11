@@ -39,7 +39,8 @@ public class SecurityConfig {
                     "/api/auth/**",
                     "/error",
                     "/ws/**",
-                    "/api/files/download/**"
+                    "/api/files/download/**",
+                    "/actuator/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

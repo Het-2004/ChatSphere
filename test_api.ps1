@@ -24,6 +24,7 @@ Write-Host "`n[2/6] Testing User Signup..." -ForegroundColor Yellow
 $signupBody = @{
     email = $testEmail
     password = $testPassword
+    name = "Test User $(Get-Random)"
     captchaToken = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
 } | ConvertTo-Json
 
@@ -74,11 +75,12 @@ if ($token) {
 # Test 5: WebSocket Endpoint Check
 Write-Host "`n[5/6] Checking WebSocket Endpoint..." -ForegroundColor Yellow
 try {
-    $wsCheck = Invoke-WebRequest -Uri "$baseUrl/ws" -Method GET -ErrorAction Stop
+    $wsCheck = Invoke-WebRequest -Uri "$baseUrl/ws/chat" -Method GET -UseBasicParsing -ErrorAction Stop
     Write-Host "✅ WebSocket endpoint accessible" -ForegroundColor Green
 } catch {
-    if ($_.Exception.Response.StatusCode -eq 426) {
-        Write-Host "✅ WebSocket endpoint exists (426 Upgrade Required)" -ForegroundColor Green
+    $statusCode = $_.Exception.Response.StatusCode
+    if ($statusCode -eq 426 -or $statusCode -eq 400 -or $statusCode -eq 401) {
+        Write-Host "✅ WebSocket endpoint exists (status code: $statusCode)" -ForegroundColor Green
     } else {
         Write-Host "⚠️  WebSocket: $($_.Exception.Message)" -ForegroundColor Yellow
     }

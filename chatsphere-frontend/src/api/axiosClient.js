@@ -34,7 +34,6 @@ axiosClient.interceptors.response.use(
     if (error.response) {
       const status = error.response.status;
 
-      // Token expired / invalid
       // Token expired / invalid / malformed
       if (status === 401 || status === 403 || (status === 400 && error.config.url?.includes("/auth/me"))) {
         clearToken();
@@ -42,13 +41,26 @@ axiosClient.interceptors.response.use(
       }
     }
 
-    return Promise.reject({
-      status: error.response?.status,
-      message:
-        error.response?.data?.message ||
-        error.message ||
-        "Network error"
-    });
+    // Extract best possible error message from backend response
+    let message = "Network error";
+    if (error.response?.data) {
+      const data = error.response.data;
+      if (data.errors && typeof data.errors === "object") {
+        // Handle field validation errors Map (e.g. ValidationErrorResponse)
+        message = Object.values(data.errors).join(", ");
+      } else {
+        // Handle runtime exceptions and standard error formats
+        message = data.error || data.message || error.message || "Network error";
+      }
+    } else {
+      message = error.message || "Network error";
+    }
+
+    const rejectedError = new Error(message);
+    rejectedError.status = error.response?.status;
+    rejectedError.response = error.response;
+
+    return Promise.reject(rejectedError);
   }
 );
 

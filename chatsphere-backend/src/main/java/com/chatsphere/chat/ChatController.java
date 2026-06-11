@@ -22,7 +22,7 @@ public class ChatController {
      * Used by Sidebar
      */
     @GetMapping("/chats")
-    public ResponseEntity<List<Chat>> getChats(Authentication auth) {
+    public ResponseEntity<List<com.chatsphere.chat.dto.ChatResponse>> getChats(Authentication auth) {
         String userId = auth.getName();
         return ResponseEntity.ok(chatService.getUserChats(userId));
     }
@@ -31,7 +31,7 @@ public class ChatController {
      * Create or get 1-to-1 chat
      */
     @PostMapping("/chats")
-    public ResponseEntity<Chat> createChat(
+    public ResponseEntity<com.chatsphere.chat.dto.ChatResponse> createChat(
             Authentication auth,
             @RequestBody java.util.Map<String, String> body
     ) {
@@ -54,7 +54,7 @@ public class ChatController {
         );
     }
     @PostMapping("/groups")
-    public ResponseEntity<Chat> createGroup(
+    public ResponseEntity<com.chatsphere.chat.dto.ChatResponse> createGroup(
             Authentication auth,
             @RequestBody com.chatsphere.chat.dto.CreateGroupRequest request
     ) {
@@ -63,7 +63,7 @@ public class ChatController {
     }
 
     @PutMapping("/chats/{chatId}/members")
-    public ResponseEntity<Chat> addMember(
+    public ResponseEntity<com.chatsphere.chat.dto.ChatResponse> addMember(
             Authentication auth,
             @PathVariable String chatId,
             @RequestBody java.util.Map<String, String> body // { "userId": "..." }

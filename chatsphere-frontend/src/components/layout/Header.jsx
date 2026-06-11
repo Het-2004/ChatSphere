@@ -3,202 +3,148 @@ import { useChat } from "../../hooks/useChat";
 import { useAuth } from "../../hooks/useAuth";
 import { formatLastSeen } from "../../utils/dateUtils";
 import ThemeSwitcher from "./ThemeSwitcher";
-import { buttonVariants } from "../animations/variants";
+
+const BackIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="19" y1="12" x2="5" y2="12" />
+    <polyline points="12 19 5 12 12 5" />
+  </svg>
+);
+
+const SearchIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="11" cy="11" r="8" />
+    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+  </svg>
+);
+
+const VideoIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="23 7 16 12 23 17 23 7" /><rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+  </svg>
+);
+
+const PhoneIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.77a16 16 0 0 0 6.29 6.29l1.13-.9a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+  </svg>
+);
+
+const MoreIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="5" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="12" cy="19" r="1" />
+  </svg>
+);
 
 export default function Header({ onUserClick }) {
-  const { chats, activeChatId, recordingUsers, typingUsers } = useChat();
-  const { logout } = useAuth();
+  const { chats, activeChatId, setActiveChatId, recordingUsers, typingUsers, onlineUsers } = useChat();
+  const { user } = useAuth();
 
-  const activeChat = chats.find((c) => c.id === activeChatId);
-
+  const activeChat = chats.find(c => c.id === activeChatId);
   if (!activeChat) return null;
 
-  // Check if anyone is recording in this chat
-  const isRecording = recordingUsers[activeChatId] && Object.keys(recordingUsers[activeChatId]).length > 0;
+  const isRecording = recordingUsers?.[activeChatId] && Object.keys(recordingUsers[activeChatId]).length > 0;
+  const isTyping = typingUsers?.[activeChatId] && Object.keys(typingUsers[activeChatId]).length > 0;
 
-  // Check typing
-  const isTyping = typingUsers[activeChatId] && Object.keys(typingUsers[activeChatId]).length > 0;
+  const other = !activeChat.isGroup
+    ? activeChat.participants?.find(p => p.id !== user?.id)
+    : null;
 
-  let statusText = activeChat.online ? "Online" : "Offline";
-  if (!activeChat.online && activeChat.lastSeen) {
-    statusText = `Last seen ${formatLastSeen(activeChat.lastSeen)}`;
+  const isOnline = other && onlineUsers?.has?.(other.id);
+
+  const getName = () => {
+    if (activeChat.isGroup) return activeChat.name;
+    return other?.username || other?.name || other?.email || activeChat.name || "Unknown";
+  };
+
+  const getAvatar = () => {
+    const name = getName();
+    if (!activeChat.isGroup && other?.avatarUrl) return other.avatarUrl;
+    if (activeChat.isGroup && activeChat.avatarUrl) return activeChat.avatarUrl;
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2a3942&color=e9edef&size=96`;
+  };
+
+  let statusText = "";
+  if (isRecording) statusText = "🎤 Recording...";
+  else if (isTyping) statusText = "typing...";
+  else if (activeChat.isGroup) {
+    const memberCount = activeChat.participants?.length || 0;
+    statusText = `${memberCount} member${memberCount !== 1 ? "s" : ""}`;
+  } else if (isOnline) {
+    statusText = "online";
+  } else if (other?.lastSeen) {
+    statusText = `last seen ${formatLastSeen(other.lastSeen)}`;
+  } else {
+    statusText = "offline";
   }
 
-  // Override status text for activities
-  if (isRecording) statusText = "🎤 Recording audio...";
-  else if (isTyping) statusText = "Typing...";
-
-  // Helper to get avatar
-  const getAvatarUrl = () => {
-    if (activeChat.isGroup) {
-      return activeChat.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(activeChat.name)}`;
-    }
-    // For direct chats, find the other participant (though activeChat usually has name set properly by Sidebar logic or backend)
-    // Assuming activeChat.name is correct from Sidebar processing
-    return activeChat.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(activeChat.name)}`;
-  };
+  const statusClass = isTyping || isRecording
+    ? "typing"
+    : isOnline
+    ? "online"
+    : "";
 
   return (
     <motion.header
-      className="chat-header glass-strong"
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      className="chat-header"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
     >
-      <div className="header-left">
-        <motion.div
-          className="user-profile-trigger"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+      {/* Left: back + avatar + info */}
+      <div className="chat-header-left">
+        <button
+          className="header-icon-btn back-btn"
+          onClick={() => setActiveChatId(null)}
+          title="Back"
+        >
+          <BackIcon />
+        </button>
+
+        <div
+          style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}
           onClick={() => onUserClick && onUserClick(activeChat)}
         >
-          <div className="avatar-container">
+          <div className="avatar-wrap" style={{ flexShrink: 0 }}>
             <img
-              src={getAvatarUrl()}
-              alt={activeChat.name}
-              className="header-avatar"
+              src={getAvatar()}
+              alt={getName()}
+              className="avatar-lg"
             />
-            {activeChat.online && <span className="status-dot"></span>}
+            {isOnline && <span className="online-dot" style={{ borderColor: "var(--header-bg)" }} />}
           </div>
 
-          <div className="header-info">
-            <h2 className="chat-title">{activeChat.name}</h2>
-
+          <div className="chat-header-info">
+            <div className="chat-header-name">{getName()}</div>
             <AnimatePresence mode="wait">
               <motion.div
                 key={statusText}
-                initial={{ opacity: 0, y: 5 }}
+                initial={{ opacity: 0, y: 4 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -5 }}
-                className={`chat-status ${activeChat.online ? 'online' : ''} ${isTyping || isRecording ? 'active-activity' : ''}`}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.15 }}
+                className={`chat-header-status ${statusClass}`}
               >
                 {statusText}
               </motion.div>
             </AnimatePresence>
           </div>
-        </motion.div>
+        </div>
       </div>
 
-      <div className="header-right">
+      {/* Right: actions */}
+      <div className="chat-header-actions">
+        <button className="header-icon-btn" title="Voice call">
+          <PhoneIcon />
+        </button>
+        <button className="header-icon-btn" title="Video call">
+          <VideoIcon />
+        </button>
         <ThemeSwitcher />
-
-        <motion.button
-          variants={buttonVariants}
-          whileHover="hover"
-          whileTap="tap"
-          onClick={logout}
-          className="btn-icon-glass"
-          title="Logout"
-        >
-          <span style={{ fontSize: '1.2rem' }}>🚪</span>
-        </motion.button>
+        <button className="header-icon-btn" title="More options">
+          <MoreIcon />
+        </button>
       </div>
-
-      <style>{`
-        .chat-header {
-          height: 80px;
-          padding: 0 1.5rem;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          border-bottom: 1px solid var(--glass-border);
-          z-index: 10;
-        }
-
-        .header-left {
-          display: flex;
-          align-items: center;
-        }
-
-        .user-profile-trigger {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          cursor: pointer;
-          padding: 0.5rem;
-          border-radius: 12px;
-          transition: background 0.2s;
-        }
-
-        .user-profile-trigger:hover {
-          background: rgba(255,255,255,0.05);
-        }
-
-        .avatar-container {
-          position: relative;
-        }
-
-        .header-avatar {
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          border: 2px solid rgba(255,255,255,0.1);
-          object-fit: cover;
-        }
-
-        .status-dot {
-          position: absolute;
-          bottom: 2px;
-          right: 2px;
-          width: 12px;
-          height: 12px;
-          background: var(--color-success);
-          border-radius: 50%;
-          border: 2px solid var(--glass-bg); /* Match header bg */
-          box-shadow: 0 0 5px var(--color-success);
-        }
-
-        .header-info {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .chat-title {
-          margin: 0;
-          font-size: 1.1rem;
-          font-weight: 600;
-          color: var(--text-primary);
-        }
-
-        .chat-status {
-          font-size: 0.85rem;
-          color: var(--text-secondary);
-        }
-
-        .chat-status.online {
-          color: var(--color-success);
-        }
-
-        .chat-status.active-activity {
-          color: var(--color-primary);
-          font-weight: 500;
-        }
-
-        .header-right {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
-
-        .btn-icon-glass {
-          width: 40px;
-          height: 40px;
-          border-radius: 12px;
-          background: rgba(255,255,255,0.05);
-          border: 1px solid var(--glass-border);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-
-        .btn-icon-glass:hover {
-          background: rgba(255,255,255,0.1);
-          border-color: var(--color-primary);
-          box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
-        }
-      `}</style>
     </motion.header>
   );
 }

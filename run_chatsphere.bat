@@ -5,6 +5,14 @@ setlocal
 title ChatSphere Launcher
 color 0B
 
+:: Load environment variables from .env
+if exist ".env" (
+    echo [*] Loading environment variables from .env...
+    for /f "usebackq eol=# tokens=1,* delims==" %%i in (".env") do (
+        set "%%i=%%j"
+    )
+)
+
 echo ===================================================
 echo      ChatSphere - Fast Launcher (JDK 21)
 echo ===================================================

@@ -1,12 +1,16 @@
-import { createContext, useEffect, useRef } from "react";
-import { connectSocket } from "../websocket/socketClient";
+import { createContext, useEffect, useRef, useContext } from "react";
+import { connectSocket, registerMessageHandler } from "../websocket/socketClient";
 import { useAuth } from "../hooks/useAuth";
+import { ChatContext } from "./ChatContext";
+import { loadKey } from "../crypto/keyStorage";
+import { decryptMessage } from "../crypto/decryptMessage";
 
 export const SocketContext = createContext(null);
 
 export const SocketProvider = ({ children }) => {
   const socketRef = useRef(null);
-  const { token } = useAuth(); // Use token from AuthContext
+  const { token } = useAuth();
+  const chatContext = useContext(ChatContext);
 
   useEffect(() => {
     if (!token) {
@@ -18,8 +22,7 @@ export const SocketProvider = ({ children }) => {
       return;
     }
 
-    // If socket already connected with same token (unlikely with this logic, but good safety), skip
-    // Actually, we should close and reconnect if token changes.
+    // Close existing connection if any
     if (socketRef.current) {
       socketRef.current.close();
     }
@@ -39,8 +42,102 @@ export const SocketProvider = ({ children }) => {
 
     socketRef.current.onerror = (err) => {
       console.error("[SocketProvider] WebSocket error:", err);
-      console.error("[SocketProvider] Check if backend is running and tokens are valid.");
     };
+
+    // Register message handlers if chat context is available
+    if (chatContext) {
+      registerMessageHandler(socketRef.current, {
+        RECEIVE_MESSAGE: async (payload) => {
+          console.log("[Socket] Received message:", payload);
+          if (payload.chatId) {
+            let messageToDisplay = { ...payload };
+            try {
+              if (payload.encryptedPayload) {
+                const keyName = `chat_${payload.chatId}_aes`;
+                const aesKey = await loadKey(keyName, "AES");
+                if (aesKey) {
+                  const encryptedData = JSON.parse(payload.encryptedPayload);
+                  const decryptedText = await decryptMessage(aesKey, encryptedData);
+                  messageToDisplay.text = decryptedText;
+                } else {
+                  console.warn("[Socket] No AES key found for chat: " + payload.chatId);
+                  messageToDisplay.text = "[Decryption key missing]";
+                }
+              }
+            } catch (err) {
+              console.error("[Socket] Failed to decrypt incoming message:", err);
+              messageToDisplay.text = "[Decryption failed]";
+              messageToDisplay.error = true;
+            }
+
+            chatContext.addMessage(payload.chatId, messageToDisplay);
+
+            // Add notification if not viewing this chat
+            if (chatContext.activeChatId !== payload.chatId) {
+              chatContext.addNotification(payload.chatId);
+            }
+          }
+        },
+
+        MESSAGE_UPDATED: (payload) => {
+          console.log("[Socket] Message updated:", payload);
+          if (payload.chatId && payload.id) {
+            chatContext.updateMessage(payload.chatId, payload.id, () => payload);
+          }
+        },
+
+        PRESENCE_UPDATE: (payload) => {
+          console.log("[Socket] Presence update:", payload);
+          if (payload.userId) {
+            if (payload.online) {
+              chatContext.setUserOnline(payload.userId);
+            } else {
+              chatContext.setUserOffline(payload.userId);
+            }
+          }
+        },
+
+        TYPING_START: (payload) => {
+          console.log("[Socket] Typing start:", payload);
+          if (payload.chatId && payload.userId) {
+            chatContext.setTypingUsers(prev => ({
+              ...prev,
+              [payload.chatId]: { ...(prev[payload.chatId] || {}), [payload.userId]: true }
+            }));
+          }
+        },
+
+        TYPING_STOP: (payload) => {
+          console.log("[Socket] Typing stop:", payload);
+          if (payload.chatId && payload.userId) {
+            chatContext.setTypingUsers(prev => ({
+              ...prev,
+              [payload.chatId]: { ...(prev[payload.chatId] || {}), [payload.userId]: false }
+            }));
+          }
+        },
+
+        RECORDING_START: (payload) => {
+          console.log("[Socket] Recording start:", payload);
+          if (payload.chatId && payload.userId) {
+            chatContext.setRecordingUsers(prev => ({
+              ...prev,
+              [payload.chatId]: { ...(prev[payload.chatId] || {}), [payload.userId]: true }
+            }));
+          }
+        },
+
+        RECORDING_STOP: (payload) => {
+          console.log("[Socket] Recording stop:", payload);
+          if (payload.chatId && payload.userId) {
+            chatContext.setRecordingUsers(prev => ({
+              ...prev,
+              [payload.chatId]: { ...(prev[payload.chatId] || {}), [payload.userId]: false }
+            }));
+          }
+        }
+      });
+    }
 
     // Cleanup on unmount or token change
     return () => {
@@ -50,7 +147,7 @@ export const SocketProvider = ({ children }) => {
         socketRef.current = null;
       }
     };
-  }, [token]);
+  }, [token, chatContext]);
 
   return (
     <SocketContext.Provider value={socketRef}>

@@ -8,6 +8,11 @@
 # Gets the directory of the script, works regardless of where it's called from
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
+# Load environment variables from .env if present
+if [ -f "$SCRIPT_DIR/.env" ]; then
+    export $(grep -v '^#' "$SCRIPT_DIR/.env" | xargs)
+fi
+
 # 2. Configuration
 FRONTEND_DIR="$SCRIPT_DIR/chatsphere-frontend"
 BACKEND_DIR="$SCRIPT_DIR/chatsphere-backend"

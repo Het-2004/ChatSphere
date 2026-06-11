@@ -81,7 +81,7 @@ public class GlobalExceptionHandler {
         )) {
             error.put("error", message);
         } else {
-            error.put("error", "An error occurred");
+            error.put("error", "An error occurred: [" + ex.getClass().getName() + "] " + ex.getMessage());
             // Log the actual error for debugging
             System.err.println("Runtime exception: " + ex.getMessage());
             ex.printStackTrace();

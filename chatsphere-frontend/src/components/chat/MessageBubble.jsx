@@ -3,10 +3,57 @@ import { useState } from "react";
 import { formatTime } from "../../utils/time";
 import { useMessageSender } from "../../hooks/useMessageSender";
 import { useChat } from "../../hooks/useChat";
-import { messageBubbleVariants } from "../animations/variants";
 import CustomEmojiPicker from "../common/CustomEmojiPicker";
 
-export default function MessageBubble({ message }) {
+// Double tick SVG (WhatsApp-style)
+const DoubleTick = ({ read }) => (
+  <svg
+    width="14"
+    height="10"
+    viewBox="0 0 16 11"
+    fill="none"
+    style={{ display: "inline-flex" }}
+  >
+    <path
+      d="M1 5.5L5 9.5L15 1.5"
+      stroke={read ? "var(--c-primary)" : "var(--text-2)"}
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M5 5.5L9 9.5"
+      stroke={read ? "var(--c-primary)" : "var(--text-2)"}
+      strokeWidth="1.8"
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
+const ReplyIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/>
+  </svg>
+);
+
+const ForwardIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/>
+  </svg>
+);
+
+const EmojiIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
+  </svg>
+);
+
+const bubbleVariants = {
+  initial: { opacity: 0, scale: 0.92, y: 8 },
+  animate: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 400, damping: 28 } },
+};
+
+export default function MessageBubble({ message, suppressTail }) {
   const { id, text, own, timestamp, pending, reactions = {}, replyToId } = message;
   const { sendReaction } = useMessageSender();
   const { setReplyingTo, setForwardingMessage } = useChat();
@@ -14,239 +61,156 @@ export default function MessageBubble({ message }) {
   const [showPicker, setShowPicker] = useState(false);
   const [showActions, setShowActions] = useState(false);
 
-  const handleReactionClick = (emojiData) => {
+  const handleReaction = (emojiData) => {
     sendReaction(id, emojiData.emoji);
     setShowPicker(false);
   };
 
+  const reactionEntries = Object.entries(reactions);
+
   return (
     <motion.div
-      variants={messageBubbleVariants}
+      variants={bubbleVariants}
       initial="initial"
       animate="animate"
-      whileHover="hover"
+      className={`msg-row ${own ? "out" : "in"} ${suppressTail ? "tail-suppress" : ""}`}
       onHoverStart={() => setShowActions(true)}
-      onHoverEnd={() => setShowActions(false)}
-      className={`message-container ${own ? "own" : "other"}`}
+      onHoverEnd={() => { setShowActions(false); if (showPicker) setShowPicker(false); }}
+      style={{ position: "relative" }}
+      id={`msg-${id}`}
     >
-      <motion.div
-        className={`message-bubble ${own ? "bubble-own" : "bubble-other"}`}
-        layout
-      >
-        {/* Reply Context */}
-        {replyToId && (
-          <div className="reply-preview">
-            <span className="reply-bar" />
-            <span className="reply-text">Replying to message...</span>
-          </div>
-        )}
-
-        {/* Media Content */}
-        {message.type === "IMAGE" && (
-          <motion.img
-            src={message.mediaUrl}
-            alt="attachment"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="message-media"
-            onClick={() => window.open(message.mediaUrl, '_blank')}
-          />
-        )}
-
-        {/* Text Content */}
-        {text && <div className="message-text">{text}</div>}
-
-        {/* Metadata */}
-        <div className="message-meta">
-          <span className="timestamp">{formatTime(timestamp)}</span>
-          {pending && <span className="status-pending">⏳</span>}
-        </div>
-
-        {/* Reactions */}
-        <AnimatePresence>
-          {Object.keys(reactions).length > 0 && (
-            <motion.div
-              className={`reactions-display ${own ? "left" : "right"}`}
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0, opacity: 0 }}
-            >
-              {Object.values(reactions).slice(0, 3).map((emoji, i) => (
-                <span key={i}>{emoji}</span>
-              ))}
-              {Object.keys(reactions).length > 3 && (
-                <span className="reaction-count">+{Object.keys(reactions).length - 3}</span>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
-
-      {/* Floating Actions */}
+      {/* Hover actions */}
       <AnimatePresence>
         {showActions && (
           <motion.div
-            className={`message-actions ${own ? "left-actions" : "right-actions"}`}
-            initial={{ opacity: 0, scale: 0.9 }}
+            className="msg-actions-wrap"
+            initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
+            exit={{ opacity: 0, scale: 0.85 }}
+            transition={{ duration: 0.12 }}
           >
-            <button onClick={() => setShowPicker(!showPicker)} title="React">😊</button>
-            <button onClick={() => setReplyingTo(message)} title="Reply">↩️</button>
-            <button onClick={() => setForwardingMessage(message)} title="Forward">➡️</button>
+            <button className="msg-action-btn" onClick={() => setShowPicker(p => !p)} title="React">
+              <EmojiIcon />
+            </button>
+            <button className="msg-action-btn" onClick={() => setReplyingTo(message)} title="Reply">
+              <ReplyIcon />
+            </button>
+            <button className="msg-action-btn" onClick={() => setForwardingMessage(message)} title="Forward">
+              <ForwardIcon />
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Emoji Picker */}
-      {showPicker && (
-        <div className="emoji-picker-popover">
-          <div className="picker-overlay" onClick={() => setShowPicker(false)} />
-          <CustomEmojiPicker onEmojiClick={handleReactionClick} />
+      {/* Emoji picker */}
+      <AnimatePresence>
+        {showPicker && (
+          <>
+            <div
+              style={{ position: "fixed", inset: 0, zIndex: 99 }}
+              onClick={() => setShowPicker(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, y: 8, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 8, scale: 0.95 }}
+              style={{
+                position: "absolute",
+                bottom: "calc(100% + 8px)",
+                [own ? "right" : "left"]: 0,
+                zIndex: 100,
+              }}
+            >
+              <CustomEmojiPicker onEmojiClick={handleReaction} />
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Bubble */}
+      <div className={`msg-bubble ${own ? "out" : "in"}`}>
+        {/* Reply preview */}
+        {replyToId && (
+          <div className="reply-preview-bubble">
+            <div className="reply-author">Replied message</div>
+            <div className="reply-text">…</div>
+          </div>
+        )}
+
+        {/* Media */}
+        {message.type === "IMAGE" && (
+          <motion.img
+            src={message.mediaUrl}
+            alt="attachment"
+            className="msg-media"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            onClick={() => window.open(message.mediaUrl, "_blank")}
+          />
+        )}
+
+        {/* Audio message */}
+        {message.type === "AUDIO" && (
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "2px 0",
+          }}>
+            <span style={{ fontSize: "1.2rem" }}>🎤</span>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: "0.8rem", opacity: 0.85, marginBottom: "4px" }}>Voice Message</div>
+              <div style={{
+                height: "4px",
+                background: own ? "rgba(255,255,255,0.3)" : "var(--bg-elevated)",
+                borderRadius: "2px",
+              }}>
+                <div style={{
+                  width: "60%",
+                  height: "100%",
+                  background: own ? "rgba(255,255,255,0.8)" : "var(--c-primary)",
+                  borderRadius: "2px",
+                }} />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Text */}
+        {text && <div className="msg-text">{text}</div>}
+
+        {/* Footer */}
+        <div className="msg-footer">
+          <span className="msg-time">{formatTime(timestamp)}</span>
+          {own && (
+            <span className="msg-tick">
+              {pending ? (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10" />
+                </svg>
+              ) : (
+                <DoubleTick read={false} />
+              )}
+            </span>
+          )}
         </div>
-      )}
 
-      <style>{`
-        .message-container {
-          display: flex;
-          flex-direction: column;
-          margin-bottom: 1rem;
-          position: relative;
-          max-width: 100%;
-        }
-
-        .message-container.own {
-          align-items: flex-end;
-        }
-
-        .message-container.other {
-          align-items: flex-start;
-        }
-
-        .message-bubble {
-          max-width: 70%;
-          padding: 12px 16px;
-          border-radius: 18px;
-          position: relative;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-          word-wrap: break-word;
-        }
-
-        .bubble-own {
-          background: linear-gradient(135deg, var(--color-primary), #2d8cf0);
-          color: white;
-          border-bottom-right-radius: 4px;
-        }
-
-        .bubble-other {
-          background: rgba(255, 255, 255, 0.1);
-          color: var(--text-primary);
-          border-bottom-left-radius: 4px; /* fixed typo own/other logic */
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .reply-preview {
-          margin-bottom: 8px;
-          padding: 4px 8px;
-          background: rgba(0,0,0,0.1);
-          border-radius: 4px;
-          font-size: 0.8rem;
-          display: flex;
-          align-items: center;
-        }
-
-        .reply-bar {
-          width: 3px;
-          height: 100%;
-          background: currentColor;
-          margin-right: 8px;
-          border-radius: 2px;
-          opacity: 0.5;
-        }
-
-        .message-media {
-          max-width: 100%;
-          border-radius: 12px;
-          margin-bottom: 8px;
-          cursor: pointer;
-        }
-
-        .message-text {
-          line-height: 1.5;
-        }
-
-        .message-meta {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          margin-top: 4px;
-          font-size: 0.7rem;
-          opacity: 0.7;
-          justify-content: flex-end;
-        }
-
-        .reactions-display {
-          position: absolute;
-          bottom: -10px;
-          background: var(--bg-secondary);
-          padding: 2px 6px;
-          border-radius: 12px;
-          font-size: 0.8rem;
-          box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-          display: flex;
-          gap: 2px;
-          border: 1px solid var(--border-color);
-          z-index: 2;
-        }
-        
-        .reactions-display.left { left: 10px; }
-        .reactions-display.right { right: 10px; }
-
-        .message-actions {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          display: flex;
-          gap: 6px;
-          background: var(--glass-bg);
-          padding: 4px;
-          border-radius: 20px;
-          backdrop-filter: blur(8px);
-          border: 1px solid var(--glass-border);
-          z-index: 5;
-        }
-
-        .left-actions { right: 100%; margin-right: 10px; }
-        .right-actions { left: 100%; margin-left: 10px; }
-
-        .message-actions button {
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 4px;
-          border-radius: 50%;
-          font-size: 1rem;
-          transition: background 0.2s;
-        }
-
-        .message-actions button:hover {
-          background: rgba(255,255,255,0.2);
-        }
-
-        .emoji-picker-popover {
-          position: absolute;
-          bottom: 100%;
-          right: 0;
-          z-index: 100;
-        }
-        
-        .picker-overlay {
-          position: fixed;
-          top: 0; left: 0; right: 0; bottom: 0;
-          z-index: 99;
-        }
-      `}</style>
+        {/* Reactions */}
+        {reactionEntries.length > 0 && (
+          <div className="msg-reactions">
+            {reactionEntries.slice(0, 5).map(([key, emoji]) => (
+              <motion.span
+                key={key}
+                className="reaction-chip"
+                whileTap={{ scale: 0.9 }}
+                onClick={() => sendReaction(id, emoji)}
+              >
+                {emoji}
+              </motion.span>
+            ))}
+          </div>
+        )}
+      </div>
     </motion.div>
   );
 }

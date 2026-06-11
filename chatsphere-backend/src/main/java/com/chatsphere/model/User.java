@@ -19,6 +19,7 @@ public class User {
     /**
      * BCrypt hashed password
      */
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private String password;
 
     /**
@@ -32,13 +33,21 @@ public class User {
      */
     private boolean online;
 
+    @Indexed(unique = true, sparse = true)
     private String name;
+    private String bio;
+    private String status; // online, away, busy, offline
     private String avatarUrl;
+    private String theme; // whatsapp, telegram, messenger, system
     private boolean twoFactorEnabled;
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private String twoFactorCode;
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private java.time.LocalDateTime twoFactorExpiry;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private String resetPasswordToken;
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private java.time.LocalDateTime resetPasswordExpiry;
     
     private java.time.LocalDateTime lastSeen;

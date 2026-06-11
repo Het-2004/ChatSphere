@@ -13,21 +13,28 @@ export const THEMES = {
     SUNSET: "sunset",
     OCEAN: "ocean",
     FOREST: "forest",
+    WHATSAPP: "whatsapp",
+    TELEGRAM: "telegram",
 };
 
 export const ThemeProvider = ({ children }) => {
     const [theme, setTheme] = useState(
-        localStorage.getItem("chatsphere-theme") || THEMES.CYBERPUNK
+        localStorage.getItem("chatsphere-theme") || THEMES.WHATSAPP
     );
 
     useEffect(() => {
         const root = window.document.documentElement;
+        const body = window.document.body;
 
-        // Remove all theme classes
-        Object.values(THEMES).forEach(t => root.classList.remove(t));
+        // Remove all theme classes from both html and body
+        Object.values(THEMES).forEach(t => {
+            root.classList.remove(t);
+            body.classList.remove(t);
+        });
 
-        // Add current theme class
+        // Add current theme class to both (CSS vars work on body)
         root.classList.add(theme);
+        body.classList.add(theme);
 
         // Set data attribute for CSS targeting
         root.setAttribute('data-theme', theme);
